@@ -23,7 +23,12 @@ class Edition extends Model
 
     public function disc()
     {
-        return $this->belongsTo(Disc::class, 'disc_id', 'id');
+        return $this -> belongsTo(Disc::class, 'disc_id', 'id');
+    }
+
+    public function randomItems()
+    {
+        return $this -> hasMany(RandomItem::class, 'edition_id', 'id');
     }
 
     public function userStatus()

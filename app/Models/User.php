@@ -25,4 +25,9 @@ class User extends Authenticatable
     public function userStatuses() {
         return $this -> hasMany(UserStatus::class, 'user_id', 'id');
     }
+
+    public function userRandoms()
+    {
+        return $this->hasMany(UserRandom::class, 'user_id', 'id');
+    }
 }
