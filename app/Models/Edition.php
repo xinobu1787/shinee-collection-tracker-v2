@@ -3,15 +3,32 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use App\Models\UserStatus;
 
 class Edition extends Model
 {
-    public function disc() {
-        return $this -> belongsTo(Disc::class, 'disc_id', 'id');
+    protected $fillable = [
+        'disc_id',
+        'code',
+        'name',
+        'display_name',
+        'price',
+        'currency',
+        'tracklist',
+        'benefit',
+        'video_content',
+        'remarks',
+    ];
+
+    public function disc()
+    {
+        return $this->belongsTo(Disc::class, 'disc_id', 'id');
     }
 
-    public function userStatus() {
-        return $this -> hasOne(UserStatus::class, 'edition_id') -> where('user_id', auth() -> id());
+    public function userStatus()
+    {
+        return $this->hasOne(UserStatus::class, 'edition_id')
+            ->where('user_id', Auth::id() ?? 0);
     }
 }
