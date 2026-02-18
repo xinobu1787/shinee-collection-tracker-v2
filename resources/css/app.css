@@ -1,3 +1,30 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* --- 1. 変数定義（一箇所にまとめ、重複を削除） --- */
+:root {
+    /* メインカラー */
+    --base-color: #88d8c0;
+    /* パールアクアグリーン */
+    --bg-color: #f8fcfb;
+    /* 全体の背景（より白に近いパステル） */
+
+    /* メンバーカラー（設計図のパステルのうすい色） */
+    --onew-color: #d1f2d1;
+    --jonghyun-color: #ffd1d1;
+    --key-color: #ffd1f0;
+    --minho-color: #d1e0ff;
+    --taemin-color: #fff9d1;
+
+    /* 共通設定 */
+    --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --member-color: var(--base-color);
+    /* デフォルトはパールアクア */
+    --member-bg: var(--bg-color);
+    /* 透過カードの「正解」を定義 */
+    --glass-bg: rgba(255, 255, 255, 0.75); /* 透過度を0.75で統一 */
+    --glass-blur: blur(6px);              /* 背景のボカシ */
+    --glass-border: 1px solid rgba(255, 255, 255, 0.3);
+    
+}

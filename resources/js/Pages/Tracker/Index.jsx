@@ -1,5 +1,8 @@
 import React from 'react';
 import { Head } from '@inertiajs/react';
+import Header from '@/Components/Header';
+import Footer from '@/Components/Footer';
+import DiscCard from '@/Components/DiscCard';
 
 export default function Index({ auth, discs }) {
     // コンソールでデータが届いているのは確認済み！
@@ -9,14 +12,9 @@ export default function Index({ auth, discs }) {
         <div className="min-h-screen bg-[#f0f9f4]"> {/* 背景をJava版に近い薄い緑に */}
             <Head title="SHINee Collection Tracker" />
 
-            {/* ヘッダー部分：Java版のデザインを再現 */}
-            <header className="py-10 text-center">
-                <h1 className="text-3xl font-bold text-white drop-shadow-md" 
-                    style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.2)' }}>
-                    SHINee Collection Tracker
-                </h1>
-            </header>
-
+            {/* ヘッダー・コンポーネントに置き換え */}
+            <Header title="SHINee Collection Tracker" />
+            
             <main className="max-w-5xl mx-auto px-4 pb-24">
                 {/* フィルタボタンの並び（一旦見た目だけ） */}
                 <div className="flex flex-wrap justify-center gap-2 mb-8">
@@ -27,33 +25,16 @@ export default function Index({ auth, discs }) {
                     ))}
                 </div>
 
-                {/* 円盤カードのグリッド */}
+                {/* 円盤カードのグリッド・コンポーネント置き換え */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {discs.map((disc) => (
-                        <div 
-                            key={disc.id} 
-                            className="bg-white p-5 rounded-full shadow-sm flex justify-between items-center border border-white hover:border-green-200 transition-all cursor-pointer group"
-                            onClick={() => console.log(`${disc.title} の詳細を表示`)}
-                        >
-                            <span className="font-bold text-gray-700 ml-6 group-hover:text-green-600">
-                                {disc.title}
-                            </span>
-                            <span className="text-xs text-gray-400 mr-6 italic">
-                                {disc.title_sub}
-                            </span>
-                        </div>
+                        <DiscCard key={disc.id} disc={disc} />
                     ))}
                 </div>
             </main>
 
-            {/* ボトムナビゲーション（ここに後でメニューを入れる） */}
-            <nav className="fixed bottom-0 w-full bg-white border-t border-gray-100 py-3 flex justify-around items-center shadow-lg">
-                <div className="text-green-500 text-xs flex flex-col items-center">
-                    <span className="mb-1 text-xl">💎</span>
-                    <span>トラッカー</span>
-                </div>
-                {/* ログインしていれば「マイページ」、いなければ「ログイン」と出すことも可能 */}
-            </nav>
+            {/* ボトムナビゲーション・コンポーネント置き換え */}
+            <Footer />
         </div>
     );
 }
