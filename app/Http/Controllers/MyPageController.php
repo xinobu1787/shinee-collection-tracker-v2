@@ -16,8 +16,9 @@ class MyPageController extends Controller
         $user = Auth::user();
 
         return Inertia::render('MyPage/Index', [
-            'auth' => [
-                'user' => $user,
+            'user_info' => [
+                'name' => $user->name,
+                'icon_url' => $user->icon_url,
             ],
             //統計データを専用メソッドから生成
             'status' => $this -> generateStatus($user -> id),

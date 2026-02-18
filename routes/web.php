@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TrackerController;
 use App\Http\Controllers\MyPageController;
@@ -7,6 +8,7 @@ use App\Http\Controllers\RandomController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Mockery\Container;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -58,3 +60,15 @@ Route::post('/random', [RandomController::class, 'store'])
 Route::patch('/random/{id}', [RandomController::class, 'updateStatus'])
     ->middleware(['auth'])
     ->name('random.update');
+
+//問い合わせページ・データ表示
+Route::get('/contact', [ContactController::class, 'index'])
+    ->name('contact.index');
+
+//問い合わせページ・データ送信
+Route::post('/contact', [ContactController::class, 'store'])
+    ->name('contact.store');
+
+//問い合わせページ・リダイレクト
+Route::get('/contact/send', [ContactController::class, 'thanks'])
+    ->name('contact.thanks');
