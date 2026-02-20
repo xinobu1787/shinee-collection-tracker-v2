@@ -22,6 +22,13 @@ class User extends Authenticatable
         'remember_token'
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'password' => 'hashed',
+        ];
+    }
+
     public function userStatuses() {
         return $this -> hasMany(UserStatus::class, 'user_id', 'id');
     }

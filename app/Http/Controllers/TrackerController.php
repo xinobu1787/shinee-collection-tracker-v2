@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\UserStatusUpdateRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Disc;
-use App\Models\Edition;
 use App\Models\UserStatus;
 use Inertia\Inertia;
 
@@ -22,26 +21,29 @@ class TrackerController extends Controller
         ]);
     }
 
-    public function updateStatus(Request $request)
+    public function updateStatus(UserStatusUpdateRequest $request)
     {
         //ゲストなら更新させないガード
         if (Auth::guest()) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
+        //バリデーション済のデータを取得
+        $validated = $request->validated();
+
         //ログイン中のユーザーIDと送られてきた形態IDでレコードを探す
         //なければ新しく作る、あればフラグを更新する
         UserStatus::updateOrCreate(
             [
                 'user_id' => Auth::id(),
-                'edition_id' => $request->edition_id
+                'edition_id' => $validated['edition_id']
             ],
             [
-                'is_purchased' => $request->is_purchased,
-                'is_wishlist' => $request->is_wishlist
+                'is_purchased' => $validated['is_purchased'] ?? false,
+                'is_wishlist' => $validated['is_wishlist'] ?? false
             ]
         );
 
-        return response()->json(['message' => 'Status updated successfully']);
+        return back()->with('success', 'フラグを更新しました！');
     }
 }

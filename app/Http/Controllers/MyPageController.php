@@ -3,15 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Edition;
-use App\Models\UserStatus;
-use Illuminate\Http\Request;
+use App\Services\UserStatusService;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class MyPageController extends Controller
 {
     //フロントへデータを渡す
-    public function index()
+    public function index(UserStatusService $service)
     {
         $user = Auth::user();
 
@@ -20,79 +19,11 @@ class MyPageController extends Controller
                 'name' => $user->name,
                 'icon_url' => $user->icon_url,
             ],
-            //統計データを専用メソッドから生成
-            'status' => $this -> generateStatus($user -> id),
+            //統計データをServiceクラスから取得
+            'status' => $service -> getStatus($user -> id),
             //ウィッシュリストを専用メソッドで取得
             'wishlist' => $this -> getWishlist($user -> id),
         ]);
-    }
-
-    /**
-     * 統計データの集計ロジック
-     */
-    private function generateStatus($userId)
-    {
-        //1.全体の進捗率
-        $totalCount = \App\Models\Edition::count();
-        $ownedCount = \App\Models\UserStatus::where('user_id', $userId)
-            ->where('is_purchased', true)
-            ->count();
-
-        $status = [
-            'total' => $totalCount > 0 ? round(($ownedCount / $totalCount) * 100) : 0,
-        ];
-
-        //2.メンバー別の進捗率
-        $members = ['Onew', 'Jonghyun', 'Key', 'Minho', 'Taemin'];
-        foreach ($members as $name) {
-            $status[$name] = $this -> calculateRateByArtist($name, $userId);
-        }
-
-        //3.国別の進捗率
-        $status['jp'] = $this -> calculateRateByCountry('Japan', $userId);
-        $status['kr'] = $this -> calculateRateByCountry('Korea', $userId);
-
-        return $status;
-    }
-
-    /**
-     * アーティスト別の購入率計算
-     */
-    private function calculateRateByArtist($artistName, $userId)
-    {
-        //該当アーティストの全形態数
-        $total = Edition::whereHas('disc', function($q) use ($artistName) {
-            $q -> where('artist', $artistName);
-        }) -> count();
-
-        //ユーザーが所持済の数
-        $owned = UserStatus::where('user_id', $userId)
-                          -> where('is_purchased', true)
-                          -> whereHas('edition.disc', function($q) use ($artistName) {
-                                $q -> where('artist', $artistName);
-                          }) -> count();
-
-        return $total > 0 ? round(($owned / $total) * 100) : 0;
-    }
-
-    /**
-     * 国別の購入率計算
-     */
-    private function calculateRateByCountry($country, $userId)
-    {
-        //該当国の全形態数
-        $total = Edition::whereHas('disc', function ($q) use ($country) {
-            $q->where('country', $country);
-        })->count();
-
-        //ユーザーが所持済の数
-        $owned = UserStatus::where('user_id', $userId)
-            ->where('is_purchased', true)
-            ->whereHas('edition.disc', function ($q) use ($country) {
-                $q->where('country', $country);
-            })->count();
-
-        return $total > 0 ? round(($owned / $total) * 100) : 0;
     }
 
     /**

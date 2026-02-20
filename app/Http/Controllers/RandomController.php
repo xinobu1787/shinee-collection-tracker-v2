@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\RandomItemUploadRequest;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -54,13 +54,10 @@ class RandomController extends Controller
     /**
      * 画像アップロード登録
      */
-    public function store(Request $request)
+    public function store(RandomItemUploadRequest $request)
     {
-        //バリデーション
-        $request->validate([
-            'item_id' => 'required|exists:random_items,id',
-            'image'   => 'required|image|max:2048',
-        ]);
+        //バリデーションの値を受け取る
+        $validated = $request->validated();
 
         $userId = Auth::id();
 
@@ -77,7 +74,7 @@ class RandomController extends Controller
         UserRandom::updateOrCreate(
             [
                 'user_id' => $userId,
-                'item_id' => $request->item_id
+                'item_id' => $validated['item_id']
             ],
             [
                 'image_url' => $imageUrl

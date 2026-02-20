@@ -19,20 +19,23 @@ class ProfileUpdateRequest extends FormRequest
             'name' => [
                 'required',
                 'string',
-                'max:255'
+                'max:20',
+                'regex:/^[a-zA-Z0-9ぁ-んァ-ヶー一-龠々]+$/u',
             ],
             'email' => [
                 'required',
                 'string',
                 'lowercase',
                 'email',
-                'max:255',
+                'max:50',
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
             'icon_url' =>  [
                 'nullable',
                 'url',
-                'max:5000'
+                'active_url',
+                'regex:/\.(jpg|jpeg|png|gif|webp)$/i',
+                'max:2048',
             ],
         ];
     }
