@@ -28,3 +28,166 @@
     --glass-border: 1px solid rgba(255, 255, 255, 0.3);
     
 }
+
+/* --- 6. モーダル内の「横長BOX」UI --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* モーダルの中身の幅を調整 */
+#modal-body {
+    /* 一定の幅を保つようにする */
+    width: 38rem !important;   /* 幅を固定（PCでもスマホでもこの幅を目指す） */
+    max-width: 92vw;           /* ただし、画面幅より大きくなってはみ出さないように */
+    
+    /* 高さは中身（形態数）に合わせる */
+    height: auto;
+    max-height: 85vh;          /* 縦に長すぎると画面を突き抜けるので、85%まででスクロール */
+    overflow-y: auto;          /* 形態が多い時はモーダル内でスクロール */
+    background: white;
+    padding: 2rem;
+    border-radius: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    /* 中央に配置するための設定（親がFlexなら不要ですが念のため） */
+    margin: auto;
+}
+
+/* --- タイトルを1行にする設定 --- */
+.modal-header-section {
+    width: 100%;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 1rem;
+}
+
+.modal-title-row {
+    display: flex;
+    align-items: baseline;      /* 文字の下を揃える */
+    gap: 1rem;
+    white-space: nowrap;        /* ★改行させない */
+    overflow: hidden;           /* はみ出し防止 */
+}
+
+.modal-main-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.modal-sub-title {
+    font-size: 0.8rem;
+    color: #888;
+}
+
+/* 形態ごとの横長カード */
+.edition-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 0.5rem;
+    border: 2px solid var(--member-color);
+    border-radius: 1.2rem;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* 詳細表示エリア（BOXの下に独立して表示） */
+.edition-detail {
+    width: 95%;
+    /* BOXより少しだけ狭くすると親子関係が見えやすい */
+    margin: 0 auto 1rem;
+    /* 中央寄せにして下に余白 */
+    padding: 0.5rem 1rem;
+    background: #fdfdfd;
+    border: 1px solid #eee;
+    border-top: none;
+    /* BOXと繋がっているように見せるなら */
+    border-radius: 0 0 1rem 1rem;
+    /* 下だけ丸く */
+    font-size: 0.9rem;
+    line-height: 1.5;
+    animation: slideDown 0.3s ease-out;
+    /* ふわっと出す */
+}
+
+/* 詳細エリア内のリスト（トラックリストなど）のスタイルを整える */
+.edition-detail ul {
+    list-style: none;
+    /* ★これで「・」が消えます */
+    padding: 0;
+    /* 左側の余白をなくす */
+    margin: 0;
+    /* 外側の余白をなくす */
+}
+
+/* チェックあり（所持）の時の反転 */
+.edition-box:has(input:checked) {
+    background-color: var(--member-color);
+    color: #fff;
+}
+
+.edition-box:has(input:checked) .material-symbols-outlined {
+    color: #fff;
+    /* アイコンも白にする */
+}
+
+.edition-name {
+    font-weight: bold;
+    font-size: 1.05rem;
+    white-space: normal;  /* 1. テキストを折り返して良い設定にする */
+    flex-shrink: 1;       /* 2. ボタンを押し出さないように「縮む」ことを許可する */
+    margin-right: 0.5rem; /* 3. ボタンとの間に最低限の余白を作る */
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* 2行で止める */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
+    line-clamp: 2;
+}
+
+/* 右側のアイコンボタン群 */
+.edition-controls {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+    margin-left: auto;   /* ★これで形態名が短くてもボタンは右端に固定される */
+}
+
+.btn-circle {
+    background: none;        /* 馴染みすぎないよう、薄いグレーを背景に */
+    border: 1px solid #ddd;    /* 境界線をはっきりさせる */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* 少し浮き上がらせる */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 0.4rem;
+    border-radius: 50%;
+}
+
+.btn-circle:hover {
+    background: rgba(136, 216, 192, 0.2);
+}
+
+/* 欲しいものボタンの基本スタイル */
+.wishlist-btn {
+    transition: all 0.3s ease;
+    color: #666; /* 未選択時は控えめな色 */
+}
+
+/* ウィッシュリストボタンがアクティブ（選択中）の時の色 */
+.wishlist-btn.active {
+    color: #ff9800; /* カートっぽくオレンジ、あるいはパステルアクアなどお好みで */
+    /* 背景色も変える場合はここに追加 */
+}

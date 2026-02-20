@@ -1,12 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Head } from '@inertiajs/react';
 import Header from '@/Components/Header';
 import Footer from '@/Components/Footer';
 import DiscCard from '@/Components/DiscCard';
+import DiscModal from '@/Components/DiscModal';
 
 export default function Index({ auth, discs }) {
     // コンソールでデータが届いているのは確認済み！
     console.log("届いたデータ:", discs);
+
+    // 選択中のディスクを管理するステート
+    const [selectedDisc, setSelectedDisc] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    // モーダルを開く関数
+    const handleOpenModal = (disc) => {
+        setSelectedDisc(disc);
+        setIsModalOpen(true);
+    };
 
     return (
         <div className="min-h-screen bg-[#f0f9f4]"> {/* 背景をJava版に近い薄い緑に */}
@@ -28,10 +39,21 @@ export default function Index({ auth, discs }) {
                 {/* 円盤カードのグリッド・コンポーネント置き換え */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {discs.map((disc) => (
-                        <DiscCard key={disc.id} disc={disc} />
+                        <DiscCard key={disc.id} disc={disc}
+                            // カードクリック時にモーダルを開く
+                            onClick={() => handleOpenModal(disc)}
+                        />
                     ))}
                 </div>
+                
             </main>
+
+            {/* 4. モーダルを配置 */}
+            <DiscModal 
+                isOpen={isModalOpen} 
+                onClose={() => setIsModalOpen(false)} 
+                disc={selectedDisc} 
+            />
 
             {/* ボトムナビゲーション・コンポーネント置き換え */}
             <Footer />
