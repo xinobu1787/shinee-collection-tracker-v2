@@ -13,6 +13,9 @@ class MyPageController extends Controller
     public function index(UserStatusService $service)
     {
         $user = Auth::user();
+        $wishlist = $this->getWishlist($user->id);
+
+        dd($wishlist->toArray());
 
         return Inertia::render('MyPage/Index', [
             'user_info' => [

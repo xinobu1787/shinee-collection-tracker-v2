@@ -6,6 +6,7 @@ use App\Http\Requests\RandomItemUploadRequest;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use App\Models\RandomItem;
 use App\Models\UserRandom;
 use App\Models\Edition;
@@ -27,12 +28,12 @@ class RandomController extends Controller
 
         // 3.ユーザーが既に持っている画像データ
         $userItems = UserRandom::where('user_id', $userId)
-        ->whereIn('item_id', $masterItems->pluck('id'))
-        ->get()
-        ->keyBy('item_id');
+            ->whereIn('item_id', $masterItems->pluck('id'))
+            ->get()
+            ->keyBy('item_id');
 
         // 4.画像があるかどうか判定して処理
-        $displayData = $masterItems->map(function($item) use ($userItems) {
+        $displayData = $masterItems->map(function ($item) use ($userItems) {
             return [
                 'item_id' => $item->id,
                 'member_name' => $item->member_name,
@@ -40,6 +41,8 @@ class RandomController extends Controller
                 'image_url' => $userItems->has($item->id) ? $userItems[$item->id]->image_url : null,
             ];
         });
+
+        dd($displayData->toArray());
 
         return Inertia::render('Random/Index', [
             'edition_info' => [
@@ -61,26 +64,36 @@ class RandomController extends Controller
 
         $userId = Auth::id();
 
-        // 1.SupabaseのRandomItemストレージフォルダに保存
-        $path = $request->file('image')
-        ->store('RandomItem', 'supabase');
+        try {
+            // 1.SupabaseのRandomItemストレージフォルダに保存
+            $path = $request->file('image')
+                ->store('RandomItem', 'supabase');
 
-        // 2.ストレージURLを取得
-        /** @var \Illuminate\Filesystem\FilesystemAdapter $disk */
-        $disk = Storage::disk('supabase');
-        $imageUrl = $disk->url($path);
+            // 2.ストレージURLを取得
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $disk */
+            $disk = Storage::disk('supabase');
+            $imageUrl = $disk->url($path);
 
-        // 3.user_randomsに保存
-        UserRandom::updateOrCreate(
-            [
-                'user_id' => $userId,
-                'item_id' => $validated['item_id']
-            ],
-            [
-                'image_url' => $imageUrl
-            ]
-        );
+            // 3.user_randomsに保存
+            UserRandom::updateOrCreate(
+                [
+                    'user_id' => $userId,
+                    'item_id' => $validated['item_id']
+                ],
+                [
+                    'image_url' => $imageUrl
+                ]
+            );
 
-        return back()->with('success', '画像をアップロードしました！');
+            return back()->with('success', '画像をアップロードしました！');
+
+        } catch (\Exception $e) {
+            // 失敗したらログに残す
+            Log::error("画像アップロード失敗[User:".Auth::id()."] [Item:{$validated['item_id']}]: " . $e->getMessage());
+
+            // もしストレージに保存だけできちゃってたら、ゴミが残らないように消す処理とかも将来的にできるね
+
+            return back()->withErrors(['error' => 'アップロードに失敗しました...。']);
+        }
     }
 }

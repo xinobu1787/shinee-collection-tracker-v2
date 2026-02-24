@@ -47,6 +47,8 @@ class UserStatusService
       }
     })->count();
 
+    // ★ もし進捗率が 0% のまま動かなかったら、ここで dd()！
+    // dd(['category' => $cate, 'total_count' => $total]);
 
     //ユーザーが所持済の数
     $owned = UserStatus::where('user_id', $userId)

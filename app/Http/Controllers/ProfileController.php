@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -30,26 +31,38 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
+        // ★ チェック1: バリデーションを通ったあとの値に、iconが含まれているか？
+        // dd($request->validated());
+
         $user = $request->user();
         $user->fill($request->validated());
 
-        if ($user->isDirty('email')) {
-            $user->email_verified_at = null;
+        try {
+            //画像がアップロードされたとき
+            if ($request->hasFile('icon')) {
+
+                // ★ チェック2: ちゃんと画像ファイルとして認識されているか？
+                // dd($request->file('icon'));
+
+                $path = $request->file('icon')
+                    ->store('UserIcon', 'supabase');
+
+                /** @var \Illuminate\Filesystem\FilesystemAdapter $disk */
+                $disk = Storage::disk('supabase');
+                $user->icon_url = $disk->url($path);
+            }
+
+            $user->save();
+
+            // ★ チェック3: 保存直前のUserモデルの中身を確認
+            // dd($user->toArray());
+
+            return Redirect::route('profile.edit');
+
+        } catch (\Exception $e) {
+            Log::error('プロフィール更新失敗: ' . $e->getMessage());
+            return back()->withErrors(['error' => '更新に失敗しました。']);
         }
-
-        //画像がアップロードされたとき
-        if ($request->hasFile('icon')) {
-            $path = $request->file('icon')
-                ->store('UserIcon', 'supabase');
-
-            /** @var \Illuminate\Filesystem\FilesystemAdapter $disk */
-            $disk = Storage::disk('supabase');
-            $user->icon_url = $disk->url($path);
-        }
-
-        $user->save();
-
-        return Redirect::route('profile.edit');
     }
 
     /**

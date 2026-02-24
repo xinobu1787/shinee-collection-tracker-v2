@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserStatusUpdateRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use App\Models\Disc;
 use App\Models\Edition;
 use App\Models\UserStatus;
@@ -14,8 +15,10 @@ class TrackerController extends Controller
     public function index()
     {
         // データ取得してInertiaに渡す
-        $discs = Disc::latestOrder() -> with('editions.userStatus')
-                                     -> get();
+        $discs = Disc::latestOrder()->with('editions.userStatus')
+            ->get();
+
+        dd($discs);
 
         return Inertia::render('Tracker/Index', [
             'discs' => $discs,
@@ -34,17 +37,27 @@ class TrackerController extends Controller
 
         //ログイン中のユーザーIDと送られてきた形態IDでレコードを探す
         //なければ新しく作る、あればフラグを更新する
-        UserStatus::updateOrCreate(
-            [
-                'user_id' => Auth::id(),
-                'edition_id' => $validated['edition_id']
-            ],
-            [
-                'is_purchased' => $validated['is_purchased'] ?? false,
-                'is_wishlist' => $validated['is_wishlist'] ?? false
-            ]
-        );
+        try {
+            UserStatus::updateOrCreate(
+                [
+                    'user_id' => Auth::id(),
+                    'edition_id' => $validated['edition_id']
+                ],
+                [
+                    'is_purchased' => $validated['is_purchased'] ?? false,
+                    'is_wishlist' => $validated['is_wishlist'] ?? false
+                ]
+            );
 
-        return back()->with('success', 'フラグを更新しました！');
+            return back()->with('success', 'フラグを更新しました！');
+
+        } catch (\Exception $e) {
+            // ★ ここでエラーをキャッチ！
+            // ログにエラー内容を記録（あとで storage/logs/laravel.log を見れば原因がわかる）
+            Log::error('フラグ更新失敗: ' . $e->getMessage());
+
+            // ユーザーには「失敗しちゃった」と伝える
+            return back()->withErrors(['error' => '更新に失敗しました。時間をおいて試してください。']);
+        }
     }
 }
