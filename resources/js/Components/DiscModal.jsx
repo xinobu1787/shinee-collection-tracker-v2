@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { router } from '@inertiajs/react';
 
 // isOpen: 開いているか, onClose: 閉じる処理, disc: 表示するデータ
 export default function DiscModal({ isOpen, onClose, disc }) {
@@ -41,7 +42,15 @@ export default function DiscModal({ isOpen, onClose, disc }) {
                                     type="checkbox"
                                     className="purchase-checkbox"
                                     checked={ed.user_status?.is_purchased} // 所持状態
-                                    onChange={() => console.log(ed.id, "の所持状態を更新")}
+                                    onChange={() => {
+                                        router.patch(route('tracker.update'), {
+                                            edition_id: ed.id,
+                                            is_purchased: !ed.user_status?.is_purchased,
+                                            is_wishlist: !!ed.user_status?.is_wishlist // 今の状態を維持
+                                        }, {
+                                            preserveScroll: true, // 画面がガクッと動かないようにする
+                                        });
+                                    }}
                                     style={{ display: 'none' }}
                                 />
 
@@ -63,9 +72,21 @@ export default function DiscModal({ isOpen, onClose, disc }) {
                                         <span className="material-symbols-outlined">info</span>
                                     </button>
                                     {/* ウィッシュリストボタン */}
-                                    <button className={`btn-circle wishlist-btn ${ed.wishlist ? 'active' : ''}`} onClick={(e) => { e.stopPropagation(); console.log('ウィッシュリスト'); }}>
+                                    <button
+                                        className={`btn-circle wishlist-btn ${ed.user_status?.is_wishlist ? 'active' : ''}`}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            router.patch(route('tracker.update'), {
+                                                edition_id: ed.id,
+                                                is_wishlist: !ed.user_status?.is_wishlist,
+                                                is_purchased: !!ed.user_status?.is_purchased
+                                            }, {
+                                                preserveScroll: true,
+                                            });
+                                        }}
+                                    >
                                         <span className="material-symbols-outlined">
-                                            {ed.wishlist ? 'shopping_cart' : 'add_shopping_cart'}
+                                            {ed.user_status?.is_wishlist ? 'shopping_cart' : 'add_shopping_cart'}
                                         </span>
                                     </button>
                                 </div>
@@ -75,14 +96,14 @@ export default function DiscModal({ isOpen, onClose, disc }) {
                             {/* ここは後で「クリックしたら開く」状態管理を作ろうね */}
                             <div>
                                 {activeDetail?.id === ed.id && (
-                                <div className="edition-detail">
-                                    {activeDetail.type === 'track' ? (
-                                        <TrackList tracklist={ed.tracklist} />
-                                    ) : (
-                                        <InfoContent ed={ed} />
-                                    )}
-                                </div>
-                            )}
+                                    <div className="edition-detail">
+                                        {activeDetail.type === 'track' ? (
+                                            <TrackList tracklist={ed.tracklist} />
+                                        ) : (
+                                            <InfoContent ed={ed} />
+                                        )}
+                                    </div>
+                                )}
                             </div>
                         </div>
                     ))}
@@ -140,7 +161,7 @@ function InfoContent({ ed }) {
             {/* 価格表示 */}
             {formattedPrice && (
                 <p className="info-item">
-                    <strong className="text-teal-600 mr-2">価格:</strong> 
+                    <strong className="text-teal-600 mr-2">価格:</strong>
                     {formattedPrice}
                 </p>
             )}

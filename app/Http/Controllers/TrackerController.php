@@ -17,7 +17,7 @@ class TrackerController extends Controller
         $discs = Disc::latestOrder()->with('editions.userStatus')
             ->get();
 
-        dd($discs);
+        //dd($discs);
 
         return Inertia::render('Tracker/Index', [
             'discs' => $discs,
@@ -43,8 +43,8 @@ class TrackerController extends Controller
                     'edition_id' => $validated['edition_id']
                 ],
                 [
-                    'is_purchased' => $validated['is_purchased'] ?? false,
-                    'is_wishlist' => $validated['is_wishlist'] ?? false
+                    'is_purchased' => $validated['is_purchased'],
+                    'is_wishlist' => $validated['is_wishlist']
                 ]
             );
 

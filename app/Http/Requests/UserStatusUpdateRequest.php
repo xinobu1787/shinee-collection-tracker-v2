@@ -30,12 +30,12 @@ class UserStatusUpdateRequest extends FormRequest
             ],
             // フラグが0か1、またはtrue/falseであること
             'is_purchased' => [
-                'sometimes',
+                'required',
                 'boolean'
             ],
             // 「欲しい（wishlist）」フラグ。同じくboolean
             'is_wishlist' => [
-                'sometimes',
+                'required',
                 'boolean'
             ],
         ];

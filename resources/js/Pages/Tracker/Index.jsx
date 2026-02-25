@@ -6,8 +6,7 @@ import DiscCard from '@/Components/DiscCard';
 import DiscModal from '@/Components/DiscModal';
 
 export default function Index({ auth, discs }) {
-    // コンソールでデータが届いているのは確認済み！
-    console.log("届いたデータ:", discs);
+    //console.log("届いたデータ:", discs);
 
     // 選択中のディスクを管理するステート
     const [selectedDisc, setSelectedDisc] = useState(null);
