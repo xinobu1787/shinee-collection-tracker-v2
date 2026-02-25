@@ -30,14 +30,33 @@ class UserStatusUpdateRequest extends FormRequest
             ],
             // フラグが0か1、またはtrue/falseであること
             'is_purchased' => [
-                'required',
+                'sometimes',
                 'boolean'
             ],
             // 「欲しい（wishlist）」フラグ。同じくboolean
             'is_wishlist' => [
-                'required',
+                'sometimes',
                 'boolean'
             ],
         ];
     }
+
+    public function attributes(): array
+    {
+        return [
+            'edition_id'   => '形態ID',
+            'is_purchased' => '所持フラグ',
+            'is_wishlist'  => 'ウィッシュリストフラグ',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'edition_id.exists'   => '指定されたディスク情報が見つかりませんでした。',
+            'is_purchased.boolean' => '所持フラグの値が正しくありません。',
+            'is_wishlist.boolean'  => 'ウィッシュリストフラグの値が正しくありません。',
+        ];
+    }
+
 }

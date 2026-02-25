@@ -8,7 +8,6 @@ use App\Http\Controllers\RandomController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use Mockery\Container;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [

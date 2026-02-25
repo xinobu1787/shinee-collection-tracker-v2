@@ -35,4 +35,24 @@ class RandomItemUploadRequest extends FormRequest
             ],
         ];
     }
+
+    public function attributes(): array
+    {
+        return [
+            'item_id' => 'アイテムID',
+            'image' => '画像',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'item_id.required' => 'アイテムの特定に失敗しました。もう一度やり直してください。',
+            'item_id.exists'   => '指定されたアイテムが見つかりませんでした。',
+            'image.required' => '画像を添付してください。',
+            'image.image' => '画像ファイルをアップロードしてください。',
+            'image.mimes' => 'アップロード可能な拡張子はjpeg・png・jpgです。',
+            'image.max' => 'アップロード可能なファイルサイズは2MBまでです。',
+        ];
+    }
 }
