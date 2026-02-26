@@ -4,6 +4,8 @@ import Header from '@/Components/Header';
 import Footer from '@/Components/Footer';
 import DiscCard from '@/Components/DiscCard';
 import DiscModal from '@/Components/DiscModal';
+import RefineBar from '@Components/RefineBar';
+
 
 export default function Index({ auth, discs }) {
     //console.log("届いたデータ:", discs);
@@ -24,16 +26,17 @@ export default function Index({ auth, discs }) {
 
             {/* ヘッダー・コンポーネントに置き換え */}
             <Header title="SHINee Collection Tracker" />
-            
+
+            {/* フィルタボタンの並び（一旦見た目だけ） */}
+            <div className="flex flex-wrap justify-center gap-2 mb-8">
+                {['All Artist', 'All Country', 'All Category', 'All Status', '新しい順'].map((label) => (
+                    <button key={label} className="px-6 py-2 bg-white border border-gray-200 rounded-full text-sm text-gray-600 shadow-sm hover:bg-gray-50">
+                        {label}
+                    </button> // <RefineBar />を導入
+                ))}
+            </div>
+
             <main className="max-w-5xl mx-auto px-4 pb-24">
-                {/* フィルタボタンの並び（一旦見た目だけ） */}
-                <div className="flex flex-wrap justify-center gap-2 mb-8">
-                    {['All Artist', 'All Country', 'All Category', 'All Status', '新しい順'].map((label) => (
-                        <button key={label} className="px-6 py-2 bg-white border border-gray-200 rounded-full text-sm text-gray-600 shadow-sm hover:bg-gray-50">
-                            {label}
-                        </button>
-                    ))}
-                </div>
 
                 {/* 円盤カードのグリッド・コンポーネント置き換え */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -44,14 +47,14 @@ export default function Index({ auth, discs }) {
                         />
                     ))}
                 </div>
-                
+
             </main>
 
             {/* 4. モーダルを配置 */}
-            <DiscModal 
-                isOpen={isModalOpen} 
-                onClose={() => setIsModalOpen(false)} 
-                disc={selectedDisc} 
+            <DiscModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                disc={selectedDisc}
             />
 
             {/* ボトムナビゲーション・コンポーネント置き換え */}
