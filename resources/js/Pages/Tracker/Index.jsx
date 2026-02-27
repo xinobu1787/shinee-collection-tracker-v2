@@ -14,11 +14,53 @@ export default function Index({ auth, discs }) {
     const [selectedDisc, setSelectedDisc] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
+    // フィルター状態を管理するステート
+    const [filters, setFilters] = useState({
+        artist: 'All',
+        country: 'All',
+        category: 'All',
+        purchased: 'All',
+        sort: 'desc'
+    });
+
     // モーダルを開く関数
     const handleOpenModal = (disc) => {
         setSelectedDisc(disc);
         setIsModalOpen(true);
     };
+
+    // --- フィルタリング処理 ---
+    const filteredDiscs = discs.filter(disc => {
+        // 1. アーティスト
+        const matchArtist = filters.artist === 'All' || disc.artist === filters.artist;
+
+        // 2. 国
+        const matchCountry = filters.country === 'All' || disc.country === filters.country;
+
+        // 3. カテゴリー (includesを使うJava版の技を継承！)
+        const matchCategory = filters.category === 'All' || (disc.category && disc.category.includes(filters.category));
+
+        // 4. 【重要】購入済み判定（新しいテーブル構造に対応！）
+        // Laravelのコントローラーで editions.userStatus を読み込んでいたよね。
+        // 「どれか一つのエディションでも所持していたら所持」とする判定例：
+        const isPurchased = disc.editions?.some(edition => edition.user_status?.is_purchased === 1);
+
+        let matchPurchased = true;
+        if (filters.is_purchased === 'Purchased') {
+            matchPurchased = isPurchased === true;
+        } else if (filters.is_purchased === 'NotPurchased') {
+            matchPurchased = isPurchased === false;
+        }
+
+        return matchArtist && matchCountry && matchCategory && matchPurchased;
+    });
+
+    // --- ソート処理 ---
+    const sortedDiscs = [...filteredDiscs].sort((a, b) => {
+        const dateA = new Date(a.release_date); // カラム名がスネークケースならこれ
+        const dateB = new Date(b.release_date);
+        return filters.sort === 'asc' ? dateA - dateB : dateB - dateA;
+    });
 
     return (
         <div className="min-h-screen bg-[#f0f9f4]"> {/* 背景をJava版に近い薄い緑に */}
@@ -27,20 +69,19 @@ export default function Index({ auth, discs }) {
             {/* ヘッダー・コンポーネントに置き換え */}
             <Header title="SHINee Collection Tracker" />
 
-            {/* フィルタボタンの並び（一旦見た目だけ） */}
-            <div className="flex flex-wrap justify-center gap-2 mb-8">
-                {['All Artist', 'All Country', 'All Category', 'All Status', '新しい順'].map((label) => (
-                    <button key={label} className="px-6 py-2 bg-white border border-gray-200 rounded-full text-sm text-gray-600 shadow-sm hover:bg-gray-50">
-                        {label}
-                    </button> // <RefineBar />を導入
-                ))}
-            </div>
+            {/* フィルタリング・ソート機能コンポーネント */}
+            <RefineBar
+                allDiscs={discs}
+                filters={filters}
+                setFilters={setFilters}
+            />
 
             <main className="max-w-5xl mx-auto px-4 pb-24">
 
                 {/* 円盤カードのグリッド・コンポーネント置き換え */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {discs.map((disc) => (
+                    {/* 全データの discs ではなく、計算後の sortedDiscs を使う！ */}
+                    {sortedDiscs.map((disc) => (
                         <DiscCard key={disc.id} disc={disc}
                             // カードクリック時にモーダルを開く
                             onClick={() => handleOpenModal(disc)}

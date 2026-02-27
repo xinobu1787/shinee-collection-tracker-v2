@@ -26,7 +26,7 @@
     --glass-bg: rgba(255, 255, 255, 0.75); /* 透過度を0.75で統一 */
     --glass-blur: blur(6px);              /* 背景のボカシ */
     --glass-border: 1px solid rgba(255, 255, 255, 0.3);
-    
+
 }
 
 /* --- 6. モーダル内の「横長BOX」UI --- */
@@ -49,7 +49,7 @@
     /* 一定の幅を保つようにする */
     width: 38rem !important;   /* 幅を固定（PCでもスマホでもこの幅を目指す） */
     max-width: 92vw;           /* ただし、画面幅より大きくなってはみ出さないように */
-    
+
     /* 高さは中身（形態数）に合わせる */
     height: auto;
     max-height: 85vh;          /* 縦に長すぎると画面を突き抜けるので、85%まででスクロール */
@@ -190,4 +190,23 @@
 .wishlist-btn.active {
     color: #ff9800; /* カートっぽくオレンジ、あるいはパステルアクアなどお好みで */
     /* 背景色も変える場合はここに追加 */
+}
+
+/* --- 4. スタイリッシュな1行フィルタ（labelなし・▽なし） --- */
+
+#filter-category-container select:hover,
+.filter-group select:hover {
+    transform: translateY(-2px);
+    background-color: #f0fdfa;
+}
+
+/* カテゴリーコンテナ自体のレイアウト */
+#filter-category-container {
+    display: flex;
+    align-items: center;
+}
+
+/* labelは非表示にする（プレースホルダー的なoptionで代用するため） */
+#filter-category-container label {
+    display: none;
 }

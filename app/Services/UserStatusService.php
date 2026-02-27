@@ -32,6 +32,13 @@ class UserStatusService
     $status['jp'] = $this->calRate(['country' => 'Japan'], $userId);
     $status['kr'] = $this->calRate(['country' => 'Korea'], $userId);
 
+    //4.バッジ用
+    $status['badges'] = [
+      'hello' => $status['total'] >= 5,
+      'odd' => $status['total'] >= 50,
+      'poet' => $status['Jonghyun'] >= 100,
+    ];
+
     return $status;
   }
 

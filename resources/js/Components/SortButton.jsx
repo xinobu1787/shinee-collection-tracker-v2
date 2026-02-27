@@ -1,26 +1,29 @@
 import React from 'react';
 
-export default function SortButton({ label }) {
-  return (
-    <div></div>
-  );
-}
-
-
-
-
-/** Javaコード
- * <div class="filter-group">
-            <select id="sort-date">
-                <option value="desc">新しい順</option>
-                <option value="asc">古い順</option>
+export default function SortButton({ options, value, onChange }) {
+    return (
+        <div className="flex items-center">
+            <select
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
+                className="
+                    appearance-none bg-white
+                    border-[1.5px] border-[var(--member-color)]
+                    rounded-[2rem] py-[0.6rem] px-[1.2rem]
+                    text-[0.9rem] text-[#555] text-center
+                    cursor-pointer min-w-[8rem]
+                    shadow-[var(--card-shadow)]
+                    transition-all duration-200 ease-in-out
+                    hover:-translate-y-[2px] hover:bg-[#f0fdfa]
+                    focus:outline-none
+                "
+            >
+                {options.map(opt => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
             </select>
         </div>
-
-        // D. ソート処理：発売日順に並び替え
-    filtered.sort((a, b) => {
-        const dateA = new Date(a.releaseDate);
-        const dateB = new Date(b.releaseDate);
-        // 昇順(asc)か降順(desc)かで計算順序を切り替え
-        return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
-    });*/
+    );
+}
