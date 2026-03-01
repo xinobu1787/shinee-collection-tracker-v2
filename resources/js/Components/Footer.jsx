@@ -12,7 +12,7 @@ export default function Footer() {
         <Link
             href="/tracker"
             className={`text-xs flex flex-col items-center gap-1 ${
-                    url.startsWith('/tracker') ? 'text-green-500' : 'text-gray-400'
+                    url.startsWith('/tracker') ? 'text-[#81d4af]' : 'text-gray-400'
             }`}
         >
             <span className="material-symbols-outlined"
@@ -26,7 +26,7 @@ export default function Footer() {
         <Link
             href="/random"
             className={`text-xs flex flex-col items-center gap-1 ${
-                    url.startsWith('/random') ? 'text-green-500' : 'text-gray-400'
+                    url.startsWith('/random') ? 'text-[#81d4af]' : 'text-gray-400'
             }`}
         >
             <span className="material-symbols-outlined"
@@ -40,7 +40,7 @@ export default function Footer() {
         <Link
             href="/mypage"
             className={`text-xs flex flex-col items-center gap-1 ${
-                    url.startsWith('/mypage') ? 'text-green-500' : 'text-gray-400'
+                    url.startsWith('/mypage') ? 'text-[#81d4af]' : 'text-gray-400'
             }`}
         >
             <span className="material-symbols-outlined"
@@ -54,7 +54,7 @@ export default function Footer() {
         <Link
             href="/contact"
             className={`text-xs flex flex-col items-center gap-1 ${
-                    url.startsWith('/contact') ? 'text-green-500' : 'text-gray-400'
+                    url.startsWith('/contact') ? 'text-[#81d4af]' : 'text-gray-400'
             }`}
         >
             <span className="material-symbols-outlined"

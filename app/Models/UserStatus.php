@@ -24,4 +24,8 @@ class UserStatus extends Model
     public function user() {
         return $this -> belongsTo(User::class, 'user_id', 'id');
     }
+
+    public function edition() {
+        return $this->belongsTo(Edition::class, 'edition_id');
+    }
 }

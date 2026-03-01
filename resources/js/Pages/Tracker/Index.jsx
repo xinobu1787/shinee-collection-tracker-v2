@@ -4,7 +4,7 @@ import Header from '@/Components/Header';
 import Footer from '@/Components/Footer';
 import DiscCard from '@/Components/DiscCard';
 import DiscModal from '@/Components/DiscModal';
-import RefineBar from '@Components/RefineBar';
+import RefineBar from '@/Components/RefineBar';
 
 
 export default function Index({ auth, discs }) {
@@ -63,7 +63,7 @@ export default function Index({ auth, discs }) {
     });
 
     return (
-        <div className="min-h-screen bg-[#f0f9f4]"> {/* 背景をJava版に近い薄い緑に */}
+        <div className="min-h-screen bg-[var(--bg-color)]"> {/* 背景をJava版に近い薄い緑に */}
             <Head title="SHINee Collection Tracker" />
 
             {/* ヘッダー・コンポーネントに置き換え */}
@@ -76,7 +76,7 @@ export default function Index({ auth, discs }) {
                 setFilters={setFilters}
             />
 
-            <main className="max-w-5xl mx-auto px-4 pb-24">
+            <main className="p-6 pb-[7rem] max-w-[1200px] mx-auto">
 
                 {/* 円盤カードのグリッド・コンポーネント置き換え */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

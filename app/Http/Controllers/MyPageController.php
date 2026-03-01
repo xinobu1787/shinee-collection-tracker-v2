@@ -15,9 +15,9 @@ class MyPageController extends Controller
         $user = Auth::user();
         $wishlist = $this->getWishlist($user->id);
 
-        dd($wishlist->toArray());
+        //dd($wishlist->toArray());
 
-        return Inertia::render('MyPage/Index', [
+        return Inertia::render('Mypage/Index', [
             'user_info' => [
                 'name' => $user->name,
                 'icon_url' => $user->icon_url,

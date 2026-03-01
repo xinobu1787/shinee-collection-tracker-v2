@@ -210,3 +210,46 @@
 #filter-category-container label {
     display: none;
 }
+
+
+.circle-progress {
+    width: 7.5rem;
+    height: 7.5rem;
+    border-radius: 50%;
+    /* ↓ここが重要！JSから届く --percent を使って色を塗る設定 */
+    background: conic-gradient(
+        var(--member-color) 0%, 
+        var(--member-color) var(--percent), 
+        #f0f0f0 var(--percent), 
+        #f0f0f0 100%
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 0.5rem;
+}
+
+.circle-progress::after {
+    content: "";
+    position: absolute;
+    width: 82%;
+    height: 82%;
+    background: white;
+    border-radius: 50%;
+}
+
+/* すでに定義済みのメンバーカラーを、円形バー専用の変数に橋渡しする */
+.circle-onew { --member-color: var(--onew-color); }
+.circle-jonghyun { --member-color: var(--jonghyun-color); }
+.circle-key { --member-color: var(--key-color); }
+.circle-minho { --member-color: var(--minho-color); }
+.circle-taemin { --member-color: var(--taemin-color); }
+
+.kaomoji {
+    position: relative;
+    z-index: 1;
+    font-size: 1.15rem;
+    font-weight: bold;
+    color: #444;
+}

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
-import FilterButton from '@Components/FilterButton';
-import SortButton from '@Components/SortButton';
+import FilterButton from '@/Components/FilterButton';
+import SortButton from '@/Components/SortButton';
 import { artistOptions, countryOptions, purchasedOptions, sortOptions } from '@/options';
 
 export default function RefineBar({ allDiscs, filters, setFilters }) {

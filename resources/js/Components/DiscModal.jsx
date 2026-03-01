@@ -93,7 +93,6 @@ export default function DiscModal({ isOpen, onClose, disc }) {
                             </label>
 
                             {/* 3. 詳細表示用の箱（隠し要素） */}
-                            {/* ここは後で「クリックしたら開く」状態管理を作ろうね */}
                             <div>
                                 {activeDetail?.id === ed.id && (
                                     <div className="edition-detail">

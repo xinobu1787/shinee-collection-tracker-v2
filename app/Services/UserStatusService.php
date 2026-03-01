@@ -29,8 +29,8 @@ class UserStatusService
     }
 
     //3.国別の進捗率
-    $status['jp'] = $this->calRate(['country' => 'Japan'], $userId);
-    $status['kr'] = $this->calRate(['country' => 'Korea'], $userId);
+    $status['jp'] = $this->calRate(['country' => 'jp'], $userId);
+    $status['kr'] = $this->calRate(['country' => 'kr'], $userId);
 
     //4.バッジ用
     $status['badges'] = [
