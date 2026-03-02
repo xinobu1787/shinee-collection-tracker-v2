@@ -54,3 +54,11 @@
     --member-color: #fffacd;
     --member-bg: #fffff0;
 }
+
+/* resources/css/app.css */
+
+@layer base {
+  body {
+    @apply min-h-screen bg-[var(--bg-color)];
+  }
+}

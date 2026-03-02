@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import { router } from '@inertiajs/react';
+import { usePage, router } from '@inertiajs/react';
 import LoginModal from '@/Components/LoginModal';
 import './DiscModal.css';
 
 // isOpen: 開いているか, onClose: 閉じる処理, disc: 表示するデータ
 export default function DiscModal({ isOpen, onClose, disc }) {
+    const { props } = usePage();
+    const auth = props.auth;
+
     const [activeDetail, setActiveDetail] = useState(null);
+    const [showLoginModal, setShowLoginModal] = useState(false);
 
     if (!isOpen || !disc) return null; // 開いていない時は何も出さない
 
@@ -23,14 +27,22 @@ export default function DiscModal({ isOpen, onClose, disc }) {
 
     //フラグ更新時にログイン状態をチェック
     const checkAuthAndExecute = (action) => {
-        if (!auth.user) {
+        console.log("今のauthの状態:", auth);
+        if (!auth ||!auth.user) {
             setShowLoginModal(true); // ゲストならモーダルを出す
             return;
         }
         action(); // ログイン済みなら本来の処理を実行
     };
 
+    console.log("showLoginModalの現在の値:", showLoginModal);
+
     return (
+        <>
+         <LoginModal
+            show={showLoginModal}
+            onClose={() => setShowLoginModal(false)}
+        />
         <div className="fixed inset-0 w-full h-full bg-white/80 backdrop-blur-sm flex justify-center items-center z-[1000]" onClick={onClose}>
             {/* stopPropagationで中身をクリックしても閉じないようにする */}
             <div className="w-[38rem] max-w-[92vw] h-auto max-h-[85vh] overflow-y-auto bg-white p-8 rounded-[2rem] shadow-[0_10px_30px_rgba(0,0,0,0.1)] m-auto" onClick={(e) => e.stopPropagation()}>
@@ -53,8 +65,8 @@ export default function DiscModal({ isOpen, onClose, disc }) {
                                     type="checkbox"
                                     className="purchase-checkbox"
                                     checked={ed.user_status?.is_purchased} // 所持状態
-                                    onChange={() => {
-                                        // e.stopPropagation(); // ←詳細モーダルまで反応してしまう場合まず親への伝播を止める
+                                    onChange={(e) => {
+                                        e.stopPropagation(); // ←詳細モーダルまで反応してしまう場合まず親への伝播を止める
                                         checkAuthAndExecute(() => {
                                             router.patch(route('tracker.update'), {
                                                 edition_id: ed.id,
@@ -128,14 +140,10 @@ export default function DiscModal({ isOpen, onClose, disc }) {
                 <button onClick={onClose} className="mt-4 text-gray-400 text-sm w-full text-center">
                     閉じる
                 </button>
-            </div>
-
-            {/* 未ログイン時に出るモーダル */}
-            <LoginModal
-                show={showLoginModal}
-                onClose={() => setShowLoginModal(false)}
-            />
+            </div>            
         </div>
+       
+        </>
     );
 }
 

@@ -1,28 +1,34 @@
 import React from 'react';
-import Modal from '@/Components/Modal'; // Breeze標準のモーダル
 import PrimaryButton from '@/Components/PrimaryButton';
 import SecondaryButton from '@/Components/SecondaryButton';
 import { Link } from '@inertiajs/react';
 
 export default function LoginModal({ show, onClose }) {
-  return (
-    <Modal show={show} onClose={onClose} maxWidth="sm">
-      <div className="p-6 text-center">
-        <h2 className="text-lg font-bold text-gray-900">ログインが必要です</h2>
-        <p className="mt-4 text-sm text-gray-600">
-          フラグを更新したり、ウィッシュリストに保存するには<br />
-          ログインが必要です。
-        </p>
-        <div className="mt-6 flex justify-center gap-4">
-          <SecondaryButton onClick={onClose}>
-            あとで
-          </SecondaryButton>
-          {/* Linkコンポーネントでログイン画面へ */}
-          <Link href={route('login')}>
-            <PrimaryButton>ログインする</PrimaryButton>
-          </Link>
+    if (!show) return null; // showがfalseなら何も出さない
+
+    return (
+        // z-indexを2000にして、既存のディスクモーダル(1000)より確実に上に持ってくる
+        <div className="fixed inset-0 z-[2000] flex items-center justify-center bg-black/50 backdrop-blur-sm" onClick={onClose}>
+            {/* 白い箱部分：stopPropagationでクリックしても閉じないようにする */}
+            <div 
+                className="w-[90%] max-w-md bg-white p-8 rounded-[2rem] shadow-2xl text-center"
+                onClick={(e) => e.stopPropagation()}
+            >
+                <h2 className="text-xl font-bold text-gray-900">ログインが必要です</h2>
+                <p className="mt-4 text-sm text-gray-600 leading-relaxed">
+                    フラグを更新したり、ウィッシュリストに保存するには<br />
+                    ログインが必要です。
+                </p>
+
+                <div className="mt-8 flex justify-center gap-4">
+                    <SecondaryButton onClick={onClose}>
+                        あとで
+                    </SecondaryButton>
+                    <Link href={route('login', { redirect: window.location.pathname })}>
+                        <PrimaryButton>ログインする</PrimaryButton>
+                    </Link>
+                </div>
+            </div>
         </div>
-      </div>
-    </Modal>
-  );
+    );
 }

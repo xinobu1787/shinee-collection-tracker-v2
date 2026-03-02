@@ -29,9 +29,15 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
+
+        // dd($request->all());
         $request->authenticate();
 
         $request->session()->regenerate();
+
+        if ($request->filled('redirect')) {
+            return redirect()->to($request->input('redirect'));
+        }
 
         return redirect()->intended(route('mypage', absolute: false));
     }

@@ -7,10 +7,14 @@ import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 
 export default function Login({ status, canResetPassword }) {
+    const queryParams = new URLSearchParams(window.location.search);
+    const redirectPath = queryParams.get('redirect');
+
     const { data, setData, post, processing, errors, reset } = useForm({
         email: '',
         password: '',
         remember: false,
+        redirect: redirectPath || '',
     });
 
     const submit = (e) => {
@@ -32,6 +36,7 @@ export default function Login({ status, canResetPassword }) {
             )}
 
             <form onSubmit={submit}>
+                <input type="hidden" name="redirect" value={data.redirect} />
                 <div>
                     <InputLabel htmlFor="email" value="メールアドレス" />
 

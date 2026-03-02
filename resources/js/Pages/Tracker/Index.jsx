@@ -68,7 +68,7 @@ export default function Index({ auth, discs }) {
         : '';
 
     return (
-        <div className={`min-h-screen bg-[var(--bg-color)] transition-colors duration-500 ${themeClass}`}>
+        <div className={`transition-colors duration-500 ${themeClass}`}>
             <Head title="SHINee Collection Tracker" />
 
             {/* ヘッダー・コンポーネントに置き換え */}

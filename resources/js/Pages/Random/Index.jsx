@@ -5,7 +5,7 @@ import Footer from '@/Components/Footer';
 
 export default function Index({ auth }) {
   return (
-    <div className="min-h-screen bg-[#f0f9f4]"> {/* 背景をJava版に近い薄い緑に */}
+    <div>
       <Head title="ランダム管理 - SHINee Collection Tracker" />
 
                 {/* ヘッダー・コンポーネントに置き換え */}

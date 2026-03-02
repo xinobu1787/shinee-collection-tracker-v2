@@ -29,7 +29,7 @@ export default function Index({ auth, status, wishlist }) {
   ];
 
   return (
-    <div className="min-h-screen bg-[var(--bg-color)]"> {/* 背景をJava版に近い薄い緑に */}
+    <div>
       <Head title="マイページ - SHINee Collection Tracker" />
 
       {/* ヘッダー・コンポーネントに置き換え */}
@@ -168,7 +168,7 @@ export default function Index({ auth, status, wishlist }) {
 
                     {/* edition-tag: グレーの小さなタグ */}
                     <span className="inline-block mt-2 text-[0.7rem] bg-[#f0f0f0] px-2 py-px rounded-[0.5rem] text-[#666]">
-                      {item.name || '通常盤'}
+                      {item.display_name || '通常盤'}
                     </span>
                   </div>
                 </div>

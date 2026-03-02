@@ -7,6 +7,7 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
 use App\Models\RandomItem;
 use App\Models\UserRandom;
 use App\Models\Edition;
@@ -16,9 +17,20 @@ class RandomController extends Controller
     /**
      * データ表示
      */
-    public function index($editionId)
+    public function index(Request $request)
     {
         $userId = Auth::id();
+
+        // URLパラメータ（?edition_id=123）から値を取る。なければ null。
+        $editionId = $request->query('edition_id');
+
+        //もしIDがない（まだフィルタで選んでいない）なら、案内画面を出す
+        if (!$editionId) {
+            return Inertia::render('Random/Index', [
+                'edition_info' => null,
+                'items' => [],
+            ]);
+        }
 
         // 1.形態情報を円盤情報と一緒に取得
         $edition = Edition::with('disc')->findOrFail($editionId);
@@ -86,10 +98,9 @@ class RandomController extends Controller
             );
 
             return back()->with('success', '画像をアップロードしました！');
-
         } catch (\Exception $e) {
             // 失敗したらログに残す
-            Log::error("画像アップロード失敗[User:".Auth::id()."] [Item:{$validated['item_id']}]: " . $e->getMessage());
+            Log::error("画像アップロード失敗[User:" . Auth::id() . "] [Item:{$validated['item_id']}]: " . $e->getMessage());
 
             // もしストレージに保存だけできちゃってたら、ゴミが残らないように消す処理とかも将来的にできるね
 
