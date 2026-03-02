@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { router } from '@inertiajs/react';
+import LoginModal from '@/Components/LoginModal';
+import './DiscModal.css';
 
 // isOpen: 開いているか, onClose: 閉じる処理, disc: 表示するデータ
 export default function DiscModal({ isOpen, onClose, disc }) {
@@ -19,16 +21,25 @@ export default function DiscModal({ isOpen, onClose, disc }) {
     // discの中にぶら下がっている形態（editions）を取り出す
     const editions = disc.editions || [];
 
+    //フラグ更新時にログイン状態をチェック
+    const checkAuthAndExecute = (action) => {
+        if (!auth.user) {
+            setShowLoginModal(true); // ゲストならモーダルを出す
+            return;
+        }
+        action(); // ログイン済みなら本来の処理を実行
+    };
+
     return (
-        <div className="modal-overlay" onClick={onClose}>
+        <div className="fixed inset-0 w-full h-full bg-white/80 backdrop-blur-sm flex justify-center items-center z-[1000]" onClick={onClose}>
             {/* stopPropagationで中身をクリックしても閉じないようにする */}
-            <div id="modal-body" onClick={(e) => e.stopPropagation()}>
+            <div className="w-[38rem] max-w-[92vw] h-auto max-h-[85vh] overflow-y-auto bg-white p-8 rounded-[2rem] shadow-[0_10px_30px_rgba(0,0,0,0.1)] m-auto" onClick={(e) => e.stopPropagation()}>
 
                 {/* ヘッダー部分 */}
-                <div className="modal-header-section">
+                <div className="w-full mb-8 border-b-2 border-[#f0f0f0] pb-4">
                     <div className="modal-title-row">
-                        <span className="modal-main-title">{disc.title}</span>
-                        {disc.title_sub && <span className="modal-sub-title">{disc.title_sub}</span>}
+                        <span className="text-[1.2rem] font-bold">{disc.title}</span>
+                        {disc.title_sub && <span className="text-[0.8rem] text-[#888]">{disc.title_sub}</span>}
                     </div>
                 </div>
 
@@ -43,20 +54,23 @@ export default function DiscModal({ isOpen, onClose, disc }) {
                                     className="purchase-checkbox"
                                     checked={ed.user_status?.is_purchased} // 所持状態
                                     onChange={() => {
-                                        router.patch(route('tracker.update'), {
-                                            edition_id: ed.id,
-                                            is_purchased: !ed.user_status?.is_purchased,
-                                            is_wishlist: !!ed.user_status?.is_wishlist // 今の状態を維持
-                                        }, {
-                                            preserveScroll: true, // 画面がガクッと動かないようにする
-                                        });
+                                        // e.stopPropagation(); // ←詳細モーダルまで反応してしまう場合まず親への伝播を止める
+                                        checkAuthAndExecute(() => {
+                                            router.patch(route('tracker.update'), {
+                                                edition_id: ed.id,
+                                                is_purchased: !ed.user_status?.is_purchased,
+                                                is_wishlist: !!ed.user_status?.is_wishlist // 今の状態を維持
+                                            }, {
+                                                preserveScroll: true, // 画面がガクッと動かないようにする
+                                            });
+                                        })
                                     }}
                                     style={{ display: 'none' }}
                                 />
 
-                                <span className="edition-name">{ed.display_name || '通常盤'}</span>
+                                <span className="font-bold text-[1.05rem] whitespace-normal flex-shrink mr-2 line-clamp-2">{ed.display_name || '通常盤'}</span>
 
-                                <div className="edition-controls">
+                                <div className="flex gap-2 flex-shrink-0 ml-auto">
                                     {/* 曲リストボタン */}
                                     <button
                                         className={`btn-circle ${activeDetail?.id === ed.id && activeDetail?.type === 'track' ? 'active-btn' : ''}`}
@@ -76,13 +90,15 @@ export default function DiscModal({ isOpen, onClose, disc }) {
                                         className={`btn-circle wishlist-btn ${ed.user_status?.is_wishlist ? 'active' : ''}`}
                                         onClick={(e) => {
                                             e.stopPropagation();
-                                            router.patch(route('tracker.update'), {
-                                                edition_id: ed.id,
-                                                is_wishlist: !ed.user_status?.is_wishlist,
-                                                is_purchased: !!ed.user_status?.is_purchased
-                                            }, {
-                                                preserveScroll: true,
-                                            });
+                                            checkAuthAndExecute(() => {
+                                                router.patch(route('tracker.update'), {
+                                                    edition_id: ed.id,
+                                                    is_wishlist: !ed.user_status?.is_wishlist,
+                                                    is_purchased: !!ed.user_status?.is_purchased
+                                                }, {
+                                                    preserveScroll: true,
+                                                });
+                                            })
                                         }}
                                     >
                                         <span className="material-symbols-outlined">
@@ -95,12 +111,13 @@ export default function DiscModal({ isOpen, onClose, disc }) {
                             {/* 3. 詳細表示用の箱（隠し要素） */}
                             <div>
                                 {activeDetail?.id === ed.id && (
-                                    <div className="edition-detail">
+                                    <div className="w-[95%] mx-auto mb-4 p-[0.5rem_1rem] bg-[#fdfdfd] border border-[#eee] border-t-0 rounded-b-[1rem] text-[0.9rem] leading-[1.5] animate-slideDown">
                                         {activeDetail.type === 'track' ? (
                                             <TrackList tracklist={ed.tracklist} />
                                         ) : (
                                             <InfoContent ed={ed} />
                                         )}
+
                                     </div>
                                 )}
                             </div>
@@ -112,6 +129,12 @@ export default function DiscModal({ isOpen, onClose, disc }) {
                     閉じる
                 </button>
             </div>
+
+            {/* 未ログイン時に出るモーダル */}
+            <LoginModal
+                show={showLoginModal}
+                onClose={() => setShowLoginModal(false)}
+            />
         </div>
     );
 }
@@ -128,11 +151,11 @@ function TrackList({ tracklist }) {
             {discUnits.map((discContent, index) => {
                 const tracks = discContent.split(',').filter(t => t.trim() !== "");
                 return (
-                    <div key={index} className="disc-unit mb-3 last:mb-0">
+                    <div key={index} className="mb-3 last:mb-0">
                         {discUnits.length > 1 && (
-                            <h4 className="disc-label text-xs font-bold text-teal-600 mb-1">DISC {index + 1}</h4>
+                            <h4 className="text-sm text-[#666] mb-1 border-b border-[#eee]">DISC {index + 1}</h4>
                         )}
-                        <ul className="track-list space-y-1">
+                        <ul className="track-list">
                             {tracks.map((t, i) => (
                                 <li key={i} className="text-sm text-gray-600 flex gap-2">
                                     <span className="font-mono">{String(i + 1).padStart(2, '0')}.</span>
@@ -195,7 +218,7 @@ function InfoContent({ ed }) {
 
             {/* 備考 */}
             {ed.remarks && (
-                <div className="remarks-box mt-4 p-3 bg-white rounded-lg border border-dashed border-gray-200 text-xs text-gray-500 italic">
+                <div className="mt-4 p-3 bg-[#fff9e6] rounded-lg border border-dashed border-gray-200 text-xs text-gray-500">
                     <strong>備考:</strong> {ed.remarks}
                 </div>
             )}

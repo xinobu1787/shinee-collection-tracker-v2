@@ -3,7 +3,7 @@ import { Head } from '@inertiajs/react';
 import Header from '@/Components/Header';
 import Footer from '@/Components/Footer';
 import DiscCard from '@/Components/DiscCard';
-import DiscModal from '@/Components/DiscModal';
+import DiscModal from '@/Components/DiscModal/DiscModal';
 import RefineBar from '@/Components/RefineBar';
 
 
@@ -19,7 +19,7 @@ export default function Index({ auth, discs }) {
         artist: 'All',
         country: 'All',
         category: 'All',
-        purchased: 'All',
+        is_purchased: 'All',
         sort: 'desc'
     });
 
@@ -62,8 +62,13 @@ export default function Index({ auth, discs }) {
         return filters.sort === 'asc' ? dateA - dateB : dateB - dateA;
     });
 
+    // メンバー別テーマ切替
+    const themeClass = (filters.artist !== 'All' && filters.artist !== 'SHINee')
+        ? `theme-${filters.artist.toLowerCase()} member-mode`
+        : '';
+
     return (
-        <div className="min-h-screen bg-[var(--bg-color)]"> {/* 背景をJava版に近い薄い緑に */}
+        <div className={`min-h-screen bg-[var(--bg-color)] transition-colors duration-500 ${themeClass}`}>
             <Head title="SHINee Collection Tracker" />
 
             {/* ヘッダー・コンポーネントに置き換え */}

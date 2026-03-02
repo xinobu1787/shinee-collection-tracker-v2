@@ -1,0 +1,71 @@
+.circle-progress {
+  width: 7.5rem;
+  height: 7.5rem;
+  border-radius: 50%;
+  /* ↓ここが重要！JSから届く --percent を使って色を塗る設定 */
+  background: conic-gradient(var(--member-color) 0%,
+      var(--member-color) var(--percent),
+      #f0f0f0 var(--percent),
+      #f0f0f0 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-bottom: 0.5rem;
+}
+
+.circle-progress::after {
+  content: "";
+  position: absolute;
+  width: 82%;
+  height: 82%;
+  background: white;
+  border-radius: 50%;
+}
+
+/* すでに定義済みのメンバーカラーを、円形バー専用の変数に橋渡しする */
+.circle-onew {
+  --member-color: var(--onew-color);
+}
+
+.circle-jonghyun {
+  --member-color: var(--jonghyun-color);
+}
+
+.circle-key {
+  --member-color: var(--key-color);
+}
+
+.circle-minho {
+  --member-color: var(--minho-color);
+}
+
+.circle-taemin {
+  --member-color: var(--taemin-color);
+}
+
+.kaomoji {
+  position: relative;
+  z-index: 1;
+  font-size: 1.15rem;
+  font-weight: bold;
+  color: #444;
+}
+
+@keyframes badgePop {
+  0% {
+    transform: scale(0.5) rotate(-10deg);
+  }
+
+  70% {
+    transform: scale(1.1) rotate(5deg);
+  }
+
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.animate-badge-pop {
+  animation: badgePop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
