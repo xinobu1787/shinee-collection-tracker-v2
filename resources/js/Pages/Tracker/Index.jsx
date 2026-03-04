@@ -43,7 +43,11 @@ export default function Index({ auth, discs }) {
         // 4. 【重要】購入済み判定（新しいテーブル構造に対応！）
         // Laravelのコントローラーで editions.userStatus を読み込んでいたよね。
         // 「どれか一つのエディションでも所持していたら所持」とする判定例：
-        const isPurchased = disc.editions?.some(edition => edition.user_status?.is_purchased === 1);
+        const isPurchased = disc.editions?.some(edition => {
+            const status = edition.user_status;
+            // statusが存在して、かつ is_purchased が「真（1 または true）」ならOK
+            return Boolean(status?.is_purchased);
+        });
 
         let matchPurchased = true;
         if (filters.is_purchased === 'Purchased') {

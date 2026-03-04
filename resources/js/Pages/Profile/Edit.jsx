@@ -3,6 +3,7 @@ import { Head, Link } from '@inertiajs/react';
 // import UpdatePasswordForm from './Partials/UpdatePasswordForm';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm';
 import BaseCard from '@/Components/BaseCard';
+import Header from '@/Components/Header';
 
 export default function Edit({ status }) {
     return (

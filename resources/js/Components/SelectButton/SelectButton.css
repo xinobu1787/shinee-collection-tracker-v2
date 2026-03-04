@@ -1,0 +1,24 @@
+
+.filter-group {
+    appearance: none;
+    /* ▽矢印を消す */
+    -webkit-appearance: none;
+    background-color: white;
+    background-image: none;
+    border: 1.5px solid var(--member-color);
+    border-radius: 2rem;
+    /* カプセル型 */
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+    color: #555;
+    cursor: pointer;
+    min-width: 8rem;
+    text-align: center;
+    box-shadow: var(--card-shadow);
+    transition: all 0.2s ease;
+}
+
+.filter-group:hover {
+    transform: translateY(-2px);
+    background-color: #f0fdfa;
+}

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
-import FilterButton from '@/Components/FilterButton';
-import SortButton from '@/Components/SortButton';
+import FilterButton from '@/Components/SelectButton/FilterButton';
+import SortButton from '@/Components/SelectButton/SortButton';
 import { artistOptions, countryOptions, purchasedOptions, sortOptions } from '@/options';
 
 export default function RefineBar({ allDiscs, filters, setFilters }) {
@@ -33,7 +33,7 @@ export default function RefineBar({ allDiscs, filters, setFilters }) {
   }, [allDiscs]); // allDiscsが書き換わった時だけ再計算するよ
 
   return (
-    <nav className="flex flex-wrap justify-center gap-[0.8rem] py-[1.5rem] px-[1rem] w-[95%] max-w-[55rem] my-[1rem] mx-auto">
+    <nav className="flex flex-wrap justify-center gap-[0.8rem] py-[1.5rem] px-[1rem] w-[95%] max-w-[55rem] my-[0.5rem] mx-auto">
       <FilterButton
         options={artistOptions}
         value={filters.artist}

@@ -18,7 +18,7 @@ export default function UserNav({ auth }) {
     <nav className="w-full flex justify-end gap-4 px-4">
       {auth.user ? (
         // ログイン中の表示
-        <Link href={route('logout')} method="post" as="button"
+        <Link href={route('logout', { redirect: window.location.pathname })} method="post" as="button"
           className={navLinkClass}
         >
           ログアウト
@@ -26,11 +26,11 @@ export default function UserNav({ auth }) {
       ) : (
         // ゲストの表示
         <>
-            <Link href={route('login')} className={navLinkClass}>
+            <Link href={route('login', { redirect: window.location.pathname })} className={navLinkClass}>
             ログイン
           </Link>
 
-            <Link href={route('register')} className={navLinkClass}>
+            <Link href={route('register', { redirect: window.location.pathname })} className={navLinkClass}>
             新規登録
           </Link>
         </>

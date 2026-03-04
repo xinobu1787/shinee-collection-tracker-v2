@@ -15,7 +15,7 @@ export default function UpdateProfileInformation({
         useForm({
             name: user.name,
             email: user.email,
-            icon: null,
+            icon_url: null,
             _method: 'patch',
         });
 
@@ -38,9 +38,9 @@ export default function UpdateProfileInformation({
                     <label htmlFor="icon-input" className="cursor-pointer hover:opacity-80 transition">
                         <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center text-3xl shadow-inner overflow-hidden">
                             {/* ここでプレビューを表示（後述） */}
-                            {data.icon ? (
+                            {data.icon_url ? (
                                 // 新しく選んだ画像があるときはそれを見せる
-                                <img src={URL.createObjectURL(data.icon)} className="w-full h-full object-cover" />
+                                <img src={URL.createObjectURL(data.icon_url)} className="w-full h-full object-cover" />
                             ) : user.icon_url ? (
                                 // 登録済みの画像があればそれ
                                 <img src={user.icon_url} className="w-full h-full object-cover" />
@@ -56,7 +56,7 @@ export default function UpdateProfileInformation({
                         type="file"
                         className="hidden"
                         accept="image/*" // 画像ファイルだけ選べるようにする優しさ
-                        onChange={(e) => setData('icon', e.target.files[0])}
+                        onChange={(e) => setData('icon_url', e.target.files[0])}
                     />
 
                     <div className="flex flex-col gap-1">

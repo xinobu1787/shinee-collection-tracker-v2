@@ -32,9 +32,8 @@ class ProfileUpdateRequest extends FormRequest
             ],
             'icon_url' =>  [
                 'nullable',
-                'url',
-                'active_url',
-                'regex:/\.(jpg|jpeg|png|gif|webp)$/i',
+                'image',     // jpg, png, bmp, gif, svg, webpであることを確認
+                'mimes:jpeg,png,jpg',
                 'max:2048',
             ],
         ];

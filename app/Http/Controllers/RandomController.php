@@ -84,7 +84,8 @@ class RandomController extends Controller
             // 2.ストレージURLを取得
             /** @var \Illuminate\Filesystem\FilesystemAdapter $disk */
             $disk = Storage::disk('supabase');
-            $imageUrl = $disk->url($path);
+            $rawUrl = $disk->url($path);
+            $imageUrl = str_replace('/s3/', '/object/public/', $rawUrl);
 
             // 3.user_randomsに保存
             UserRandom::updateOrCreate(

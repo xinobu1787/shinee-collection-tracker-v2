@@ -39,17 +39,22 @@ class ProfileController extends Controller
 
         try {
             //画像がアップロードされたとき
-            if ($request->hasFile('icon')) {
+            if ($request->hasFile('icon_url')) {
 
                 // ★ チェック2: ちゃんと画像ファイルとして認識されているか？
                 // dd($request->file('icon'));
 
-                $path = $request->file('icon')
+                $path = $request->file('icon_url')
                     ->store('UserIcon', 'supabase');
 
                 /** @var \Illuminate\Filesystem\FilesystemAdapter $disk */
                 $disk = Storage::disk('supabase');
-                $user->icon_url = $disk->url($path);
+
+                // 一旦、現在のURL（/s3/ が含まれるもの）を取得
+                $rawUrl = $disk->url($path);
+                // 【ここを追加！】/s3/ を /object/public/ に置換して、表示用のURLにする
+                $user->icon_url = str_replace('/s3/', '/object/public/', $rawUrl);
+                
             }
 
             $user->save();
