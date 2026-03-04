@@ -5,6 +5,7 @@ import Header from '@/Components/Header';
 import Footer from '@/Components/Footer';
 import UserInfoCard from '@/Components/UserInfoCard';
 import BaseCard from '@/Components/BaseCard';
+import UserNav from '@/Components/UserNav';
 
 export default function Index({ auth, status, wishlist }) {
 
@@ -34,6 +35,9 @@ export default function Index({ auth, status, wishlist }) {
 
       {/* ヘッダー・コンポーネントに置き換え */}
       <Header title="My Collection Status" />
+
+      {/* ユーザーナビ */}
+      <UserNav auth={auth} />
 
       <main className="p-6 pb-[7rem] max-w-[1200px] mx-auto">
 

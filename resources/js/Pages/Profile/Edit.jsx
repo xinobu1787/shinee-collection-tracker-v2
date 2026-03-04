@@ -1,39 +1,46 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
-import DeleteUserForm from './Partials/DeleteUserForm';
-import UpdatePasswordForm from './Partials/UpdatePasswordForm';
+import { Head, Link } from '@inertiajs/react';
+// import DeleteUserForm from './Partials/DeleteUserForm';
+// import UpdatePasswordForm from './Partials/UpdatePasswordForm';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm';
+import BaseCard from '@/Components/BaseCard';
 
-export default function Edit({ mustVerifyEmail, status }) {
+export default function Edit({ status }) {
     return (
-        <AuthenticatedLayout
-            header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    Profile
-                </h2>
-            }
-        >
+        <div>
             <Head title="ユーザー情報 - SHINee Collection Tracker" />
 
-            <div className="py-12">
-                <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                    <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8">
-                        <UpdateProfileInformationForm
-                            mustVerifyEmail={mustVerifyEmail}
-                            status={status}
-                            className="max-w-xl"
-                        />
-                    </div>
+            {/* ヘッダー・コンポーネントに置き換え */}
+            <Header title="Profile" />
 
-                    {/*<div className="bg-white p-4 shadow sm:rounded-lg sm:p-8">
+            <main className="p-6 pb-[7rem] max-w-[1200px] mx-auto">
+                <BaseCard title="Information Update">
+                    <UpdateProfileInformationForm
+                        status={status}
+                        className="max-w-xl"
+                    />
+                </BaseCard>
+
+
+                {/*<div className="bg-white p-4 shadow sm:rounded-lg sm:p-8">
                         <UpdatePasswordForm className="max-w-xl" />
                     </div>*/}
 
-                    {/*<div className="bg-white p-4 shadow sm:rounded-lg sm:p-8">
+                {/*<div className="bg-white p-4 shadow sm:rounded-lg sm:p-8">
                         <DeleteUserForm className="max-w-xl" />
                     </div>*/}
+
+                {/* カードの外に「戻る」を配置 */}
+                <div className="mt-8 flex justify-center">
+                    <Link
+                        href={route('mypage')} // マイページのルートへ
+                        className="flex items-center gap-2 text-gray-500 hover:text-[var(--base-color)] transition-colors"
+                    >
+                        <span>←</span>
+                        <span className="text-sm font-medium">マイページへ戻る</span>
+                    </Link>
                 </div>
-            </div>
-        </AuthenticatedLayout>
+            </main>
+        </div>
+
     );
 }

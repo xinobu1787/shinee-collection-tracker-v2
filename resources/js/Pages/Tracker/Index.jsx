@@ -5,7 +5,7 @@ import Footer from '@/Components/Footer';
 import DiscCard from '@/Components/DiscCard';
 import DiscModal from '@/Components/DiscModal/DiscModal';
 import RefineBar from '@/Components/RefineBar';
-
+import UserNav from '@/Components/UserNav';
 
 export default function Index({ auth, discs }) {
     //console.log("届いたデータ:", discs);
@@ -73,6 +73,9 @@ export default function Index({ auth, discs }) {
 
             {/* ヘッダー・コンポーネントに置き換え */}
             <Header title="SHINee Collection Tracker" />
+
+            {/* ユーザーナビ */}
+            <UserNav auth={auth} />
 
             {/* フィルタリング・ソート機能コンポーネント */}
             <RefineBar

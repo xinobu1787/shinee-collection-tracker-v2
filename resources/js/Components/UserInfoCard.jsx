@@ -22,7 +22,7 @@ export default function UserInfoCard({ user }) {
           <div className="flex-shrink-0">
             {/* 編集画面へのクイックリンク */}
             <a href="/profile" className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-600 py-1 px-3 rounded-full transition">
-              設定を変更
+              編集
             </a>
           </div>
         </div>
