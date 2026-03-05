@@ -100,7 +100,7 @@ export default function UpdateProfileInformation({
 
                 <div className="flex items-center gap-4">
                     <PrimaryButton disabled={processing}>保存する</PrimaryButton>
-
+                    <InputError className="mt-2" message={errors.error} />
                     <Transition
                         show={recentlySuccessful}
                         enter="transition ease-in-out"

@@ -9,9 +9,6 @@ import UserNav from '@/Components/UserNav';
 
 export default function Index({ auth, status, wishlist }) {
 
-  console.log("届いたステータス：", status);
-  console.log("届いたウィッシュリスト：", wishlist);
-
   // メンバー名と顔文字の対応表
   const memberConfig = [
     { name: 'Onew', emoji: '⌒∇⌒', key: 'Onew', className: 'circle-onew' },
@@ -33,7 +30,7 @@ export default function Index({ auth, status, wishlist }) {
     <div>
       <Head title="マイページ - SHINee Collection Tracker" />
 
-      {/* ヘッダー・コンポーネントに置き換え */}
+      {/* ヘッダー */}
       <Header title="My Collection Status" />
 
       {/* ユーザーナビ */}

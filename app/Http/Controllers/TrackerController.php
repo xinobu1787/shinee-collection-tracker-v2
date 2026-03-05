@@ -13,11 +13,10 @@ class TrackerController extends Controller
 {
     public function index()
     {
-        // データ取得してInertiaに渡す
+        // ディスク情報に加え、形態ごとの「ユーザー所持状態」をEager Loadingで一括取得
+        // N+1問題を回避し、Spring Boot版にはなかったユーザー別管理を実現
         $discs = Disc::latestOrder()->with('editions.userStatus')
             ->get();
-
-        //dd($discs);
 
         return Inertia::render('Tracker/Index', [
             'discs' => $discs,
@@ -26,17 +25,18 @@ class TrackerController extends Controller
 
     public function updateStatus(UserStatusUpdateRequest $request)
     {
-        //ゲストなら更新させないガード
+        // 1. セキュリティガード
+        // ログイン済みユーザーのみ実行可能にする（Middlewareでも制限しているが、二重の安全策）
         if (Auth::guest()) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
-        //バリデーション済のデータを取得
         $validated = $request->validated();
 
-        //ログイン中のユーザーIDと送られてきた形態IDでレコードを探す
-        //なければ新しく作る、あればフラグを更新する
+
         try {
+            // 2. データの整合性維持
+            // ユーザーIDと形態IDの組み合わせで、既存レコードの更新または新規作成を行う
             UserStatus::updateOrCreate(
                 [
                     'user_id' => Auth::id(),
@@ -48,14 +48,16 @@ class TrackerController extends Controller
                 ]
             );
 
+            // 3. ユーザーへのフィードバック（成功時）
+            // Inertiaのフラッシュメッセージとしてフロントエンドに通知
             return back()->with('success', 'フラグを更新しました！');
 
         } catch (\Exception $e) {
-            // ★ ここでエラーをキャッチ！
-            // ログにエラー内容を記録（あとで storage/logs/laravel.log を見れば原因がわかる）
+            // 4. エラーハンドリングと可視化
+            // ログを残すことで、本番環境でのトラブルシューティングを容易にする
             Log::error('フラグ更新失敗: ' . $e->getMessage());
 
-            // ユーザーには「失敗しちゃった」と伝える
+            // フロントエンドに例外を知らせ、InputErrorコンポーネントで表示させる
             return back()->withErrors(['error' => '更新に失敗しました。時間をおいて試してください。']);
         }
     }

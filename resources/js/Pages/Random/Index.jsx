@@ -3,6 +3,8 @@ import { Head } from '@inertiajs/react';
 import Header from '@/Components/Header';
 import Footer from '@/Components/Footer';
 import UserNav from '@/Components/UserNav';
+import InputError from '@/Components/Breeze/InputError';
+import InputSuccess from '@/Components/InputSuccess';
 
 export default function Index({ auth }) {
   return (

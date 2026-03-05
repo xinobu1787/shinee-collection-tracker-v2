@@ -8,13 +8,12 @@ import RefineBar from '@/Components/RefineBar';
 import UserNav from '@/Components/UserNav';
 
 export default function Index({ auth, discs }) {
-    //console.log("届いたデータ:", discs);
 
-    // 選択中のディスクを管理するステート
+    // 1. 状態管理: 選択中のディスクとモーダルの開閉
     const [selectedDisc, setSelectedDisc] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    // フィルター状態を管理するステート
+    // 2. フィルタリング状態: 初期値はすべて 'All'
     const [filters, setFilters] = useState({
         artist: 'All',
         country: 'All',
@@ -30,19 +29,16 @@ export default function Index({ auth, discs }) {
     };
 
     // --- フィルタリング処理 ---
+    // Laravelから届いた全データを、ユーザーが選択した条件で絞り込む
     const filteredDiscs = discs.filter(disc => {
-        // 1. アーティスト
         const matchArtist = filters.artist === 'All' || disc.artist === filters.artist;
-
-        // 2. 国
         const matchCountry = filters.country === 'All' || disc.country === filters.country;
 
-        // 3. カテゴリー (includesを使うJava版の技を継承！)
+        // Java版の「複数カテゴリを文字列で持つ」仕様を継承し、部分一致で判定
         const matchCategory = filters.category === 'All' || (disc.category && disc.category.includes(filters.category));
 
-        // 4. 【重要】購入済み判定（新しいテーブル構造に対応！）
-        // Laravelのコントローラーで editions.userStatus を読み込んでいたよね。
-        // 「どれか一つのエディションでも所持していたら所持」とする判定例：
+        // 所持フラグ判定: リレーション先の user_status を確認（Laravelリプレイスでの新機能）
+        // どれか一つのエディションでも所持していたら所持とする
         const isPurchased = disc.editions?.some(edition => {
             const status = edition.user_status;
             // statusが存在して、かつ is_purchased が「真（1 または true）」ならOK
@@ -60,13 +56,14 @@ export default function Index({ auth, discs }) {
     });
 
     // --- ソート処理 ---
+    // 絞り込み後のデータを、新しい順/古い順に並び替え
     const sortedDiscs = [...filteredDiscs].sort((a, b) => {
-        const dateA = new Date(a.release_date); // カラム名がスネークケースならこれ
+        const dateA = new Date(a.release_date);
         const dateB = new Date(b.release_date);
         return filters.sort === 'asc' ? dateA - dateB : dateB - dateA;
     });
 
-    // メンバー別テーマ切替
+    // メンバー別テーマ切替: 選択されたアーティストに応じてCSSクラスを付与
     const themeClass = (filters.artist !== 'All' && filters.artist !== 'SHINee')
         ? `theme-${filters.artist.toLowerCase()} member-mode`
         : '';
@@ -75,13 +72,13 @@ export default function Index({ auth, discs }) {
         <div className={`transition-colors duration-500 ${themeClass}`}>
             <Head title="SHINee Collection Tracker" />
 
-            {/* ヘッダー・コンポーネントに置き換え */}
+            {/* ヘッダー */}
             <Header title="SHINee Collection Tracker" />
 
             {/* ユーザーナビ */}
             <UserNav auth={auth} />
 
-            {/* フィルタリング・ソート機能コンポーネント */}
+            {/* フィルタリング・ソート機能 */}
             <RefineBar
                 allDiscs={discs}
                 filters={filters}
@@ -90,7 +87,7 @@ export default function Index({ auth, discs }) {
 
             <main className="p-6 pb-[7rem] max-w-[1200px] mx-auto">
 
-                {/* 円盤カードのグリッド・コンポーネント置き換え */}
+                {/* 円盤カードのグリッド */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* 全データの discs ではなく、計算後の sortedDiscs を使う！ */}
                     {sortedDiscs.map((disc) => (
@@ -103,14 +100,14 @@ export default function Index({ auth, discs }) {
 
             </main>
 
-            {/* 4. モーダルを配置 */}
+            {/* モーダル */}
             <DiscModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 disc={selectedDisc}
             />
 
-            {/* ボトムナビゲーション・コンポーネント置き換え */}
+            {/* フッター・ボトムナビ */}
             <Footer />
         </div>
     );

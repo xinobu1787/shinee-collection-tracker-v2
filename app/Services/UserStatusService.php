@@ -47,17 +47,14 @@ class UserStatusService
    */
   private function calRate(array $cate, int $userId)
   {
-    //該当の全形態数
+    // リレーション先(disc)の条件でEditionを絞り込み、分母(total)を算出
     $total = Edition::whereHas('disc', function ($q) use ($cate) {
       foreach ($cate as $column => $value) {
         $q->where($column, $value);
       }
     })->count();
 
-    // ★ もし進捗率が 0% のまま動かなかったら、ここで dd()！
-    // dd(['category' => $cate, 'total_count' => $total]);
-
-    //ユーザーが所持済の数
+    // ユーザーの状態(is_purchased)かつ、条件に合うものを分子(owned)として算出
     $owned = UserStatus::where('user_id', $userId)
       ->where('is_purchased', true)
       ->whereHas('edition.disc', function ($q) use ($cate) {
@@ -68,5 +65,4 @@ class UserStatusService
 
     return $total > 0 ? round(($owned / $total) * 100) : 0;
   }
-
 }
