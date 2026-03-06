@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Models\RandomItem;
 use App\Models\UserRandom;
 use App\Models\Edition;
+use App\Models\Disc;
 
 class RandomController extends Controller
 {
@@ -107,5 +108,87 @@ class RandomController extends Controller
 
             return back()->withErrors(['error' => 'アップロードに失敗しました...。']);
         }
+    }
+
+    /**
+     * 開発用（IndexTruthを表示）
+     */
+    public function dev(Request $request)
+    {
+        $userId = Auth::id();
+        $artist = $request->query('artist');
+        $discId = $request->query('disc_id');
+        $editionId = $request->query('edition_id');
+        $type = $request->query('type');
+
+        // 1. Eager Loadingでリレーション先をまとめて取得
+        $itemQuery = RandomItem::with(['edition.disc']);
+
+        // 2. 形態(Edition)での絞り込み（連動）
+        if ($editionId) {
+            $itemQuery->where('edition_id', $editionId);
+        }
+
+        // 3. アイテム種別(Type)での絞り込み（同マスタ内）
+        if ($request->filled('type')) {
+            $itemQuery->where('item_type', 'LIKE', '%' . $type . '%');
+        }
+
+        $masterItems = $itemQuery->get();
+
+        // 4. ユーザー所持情報の取得
+        $userItems = UserRandom::where('user_id', $userId)
+            ->whereIn('item_id', $masterItems->pluck('id'))
+            ->get()
+            ->keyBy('item_id');
+
+        if (!$editionId) {
+            // 開発中でも、IDがないときはIndexTruth（の空状態）を出す
+            return Inertia::render('Random/IndexTruth', [
+                'edition_info' => null,
+                'items' => [],
+            ]);
+        }
+
+        // 5. フロントに渡すデータの組み立て
+        $displayData = $masterItems->map(function ($item) use ($userItems) {
+            return [
+                'item_id' => $item->id,
+                'member_name' => $item->member_name,
+                'item_type' => $item->item_type,
+                // ここでリレーションを辿って「出自」をセット！
+                'parent_info' => [
+                    'artist' => $item->edition->disc->artist,
+                    'disc_title' => $item->edition->disc->title,
+                    'edition_name' => $item->edition->display_name,
+                ],
+                'image_url' => $userItems->has($item->id) ? $userItems[$item->id]->image_url : null,
+            ];
+        });
+
+        // 開発中は dd() で中身を確認しながら進められるね！
+        // dd($displayData->toArray());
+
+        // 6. 看板（edition_info）の作成
+        // $editionIdがあればその形態の情報を、なければ「全件表示」用にする
+        $editionInfo = null;
+        if ($editionId) {
+            $edition = Edition::with('disc')->findOrFail($editionId);
+            $editionInfo = [
+                'artist' => $edition->disc->artist,
+                'disc_title' => $edition->disc->title,
+                'edition_name' => $edition->display_name,
+            ];
+        }
+
+        return Inertia::render('Random/IndexTruth', [
+            'edition_info' => $editionInfo,
+            'items' => $displayData,
+            'selected_type' => $type,
+
+            'artists' => Disc::select('artist')->distinct()->pluck('artist'), // 重複なしの全アーティスト
+            'discs'   => Disc::when($artist, fn($q) => $q->where('artist', $artist))->get(), // アーティストで絞った円盤
+            'editions' => Edition::when($discId, fn($q) => $q->where('disc_id', $discId))->get(), // 円盤で絞った形態
+        ]);
     }
 }

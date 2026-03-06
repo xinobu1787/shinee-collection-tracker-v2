@@ -11,7 +11,7 @@ export default function Index({ auth }) {
     <div>
       <Head title="ランダム管理 - SHINee Collection Tracker" />
 
-                {/* ヘッダー・コンポーネントに置き換え */}
+      {/* ヘッダー */}
       <Header title="Random Collection Log" />
 
       {/* ユーザーナビ */}

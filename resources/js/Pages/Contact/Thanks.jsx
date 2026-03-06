@@ -23,7 +23,7 @@ export default function Thanks() {
         </div>
 
         <div className="pt-6">
-          {/* トップページに戻るボタン */}
+          {/* 戻るボタン */}
           <Link
             href={route('contact.index')}
             className="flex items-center gap-2 text-gray-500 hover:text-[var(--base-color)] transition-colors"

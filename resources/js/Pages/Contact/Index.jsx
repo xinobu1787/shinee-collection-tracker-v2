@@ -11,7 +11,7 @@ export default function Index() {
     <div>
       <Head title="問い合わせ - SHINee Collection Tracker" />
 
-                {/* ヘッダー・コンポーネントに置き換え */}
+      {/* ヘッダー */}
       <Header title="Help & Support" />
 
       <main className="p-6 pb-[7rem] max-w-[1200px] mx-auto">

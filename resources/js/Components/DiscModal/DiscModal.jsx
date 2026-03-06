@@ -128,7 +128,7 @@ export default function DiscModal({ isOpen, onClose, disc }) {
                                             }}
                                         >
                                             <span className="material-symbols-outlined">
-                                                {ed.user_status?.is_wishlist ? 'shopping_cart' : 'add_shopping_cart'}
+                                                {ed.user_status?.is_wishlist ? 'bookmark_added' : 'bookmark_add'}
                                             </span>
                                         </button>
                                     </div>

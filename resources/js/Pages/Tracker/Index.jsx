@@ -4,7 +4,7 @@ import Header from '@/Components/Header';
 import Footer from '@/Components/Footer';
 import DiscCard from '@/Components/DiscCard';
 import DiscModal from '@/Components/DiscModal/DiscModal';
-import RefineBar from '@/Components/RefineBar';
+import DiscRefine from '@/Components/DiscRefine';
 import UserNav from '@/Components/UserNav';
 
 export default function Index({ auth, discs }) {
@@ -79,7 +79,7 @@ export default function Index({ auth, discs }) {
             <UserNav auth={auth} />
 
             {/* フィルタリング・ソート機能 */}
-            <RefineBar
+            <DiscRefine
                 allDiscs={discs}
                 filters={filters}
                 setFilters={setFilters}

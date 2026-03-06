@@ -15,7 +15,6 @@ export default function ContactForm() {
 
   const submit = (e) => {
     e.preventDefault();
-    // Laravelのstoreメソッドへ飛ばす！
     post(route('contact.store'), {
       onSuccess: () => reset(), // 送信成功したらフォームを空にする
     });
@@ -69,7 +68,7 @@ export default function ContactForm() {
           value={data.body}
           placeholder="お問い合わせ内容をご入力ください"
           className="mt-1 block w-full border-gray-500 focus:border-emerald-500 focus:ring-emerald-500 rounded-md shadow-sm"
-          rows="5" // ここで高さを調整できるよ！
+          rows="5" // ここで高さを調整
           onChange={(e) => setData('body', e.target.value)}
         ></textarea>
         <InputError message={errors.body} className="mt-2" />

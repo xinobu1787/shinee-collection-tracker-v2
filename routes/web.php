@@ -41,6 +41,11 @@ Route::get('/random', [RandomController::class, 'index'])
     ->middleware(['auth'])
     ->name('random.index');
 
+//開発用
+Route::get('/random-dev', [RandomController::class, 'dev'])
+    ->middleware(['auth'])
+    ->name('random.dev');
+
 //ランダム管理ページ・データ登録
 Route::post('/random', [RandomController::class, 'store'])
     ->middleware(['auth'])
