@@ -34,7 +34,7 @@ export const sortOptions = [
 /* --ランダム管理ページ用-- */
 //メンバー名一覧
 export const memberOptions = [
-  { value: '', label: 'ALL Member' },
+  { value: '', label: 'All Member' },
   { value: 'none', label: 'その他' },
   { value: '集合', label: '集合' },
   { value: 'Onew', label: 'Onew' },
@@ -46,7 +46,7 @@ export const memberOptions = [
 
 //アイテム名一覧
 export const typeOptions = [
-  { value: '', label: 'ALL Type' },
+  { value: '', label: 'All Type' },
   { value: 'トレカ', label: 'トレカ' },
   { value: 'Phone Card', label: 'Phone Card' },
   { value: 'スペシャルカード', label: 'スペシャルカード' },

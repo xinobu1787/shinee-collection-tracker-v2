@@ -1,0 +1,16 @@
+.select-box {
+    appearance: none !important;
+    background-color: white;
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 1.5em 1.5em;
+    border: 1.5px solid var(--member-color) !important;
+    border-radius: 0.6rem;
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+    color: #555;
+    cursor: pointer;
+    min-width: 8rem;
+    width: 100%;
+    box-shadow: var(--card-shadow);
+}

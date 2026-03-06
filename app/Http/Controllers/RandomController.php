@@ -142,14 +142,6 @@ class RandomController extends Controller
             ->get()
             ->keyBy('item_id');
 
-        if (!$editionId) {
-            // 開発中でも、IDがないときはIndexTruth（の空状態）を出す
-            return Inertia::render('Random/IndexTruth', [
-                'edition_info' => null,
-                'items' => [],
-            ]);
-        }
-
         // 5. フロントに渡すデータの組み立て
         $displayData = $masterItems->map(function ($item) use ($userItems) {
             return [
@@ -166,9 +158,6 @@ class RandomController extends Controller
             ];
         });
 
-        // 開発中は dd() で中身を確認しながら進められるね！
-        // dd($displayData->toArray());
-
         // 6. 看板（edition_info）の作成
         // $editionIdがあればその形態の情報を、なければ「全件表示」用にする
         $editionInfo = null;
@@ -182,6 +171,7 @@ class RandomController extends Controller
         }
 
         return Inertia::render('Random/IndexTruth', [
+
             'edition_info' => $editionInfo,
             'items' => $displayData,
             'selected_type' => $type,
@@ -189,6 +179,7 @@ class RandomController extends Controller
             'artists' => Disc::select('artist')->distinct()->pluck('artist'), // 重複なしの全アーティスト
             'discs'   => Disc::when($artist, fn($q) => $q->where('artist', $artist))->get(), // アーティストで絞った円盤
             'editions' => Edition::when($discId, fn($q) => $q->where('disc_id', $discId))->get(), // 円盤で絞った形態
+
         ]);
     }
 }
