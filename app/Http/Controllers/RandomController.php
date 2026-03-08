@@ -120,16 +120,66 @@ class RandomController extends Controller
         $discId = $request->query('disc_id');
         $editionId = $request->query('edition_id');
         $type = $request->query('type');
+        $member = $request->query('member');
+
+
+        // --- ここから追加：連動の整合性チェック ---
+
+        // 1. 円盤が現在のアーティストに属しているかチェック
+        if ($artist && $discId) {
+            $exists = Disc::where('artist', $artist)->where('id', $discId)->exists();
+            if (!$exists) {
+                $discId = null;    // 矛盾してたら円盤をリセット
+                $editionId = null; // 円盤が消えれば形態も消す
+            }
+        }
+
+        // 2. 形態が現在の円盤に属しているかチェック
+        if ($discId && $editionId) {
+            $exists = Edition::where('disc_id', $discId)->where('id', $editionId)->exists();
+            if (!$exists) {
+                $editionId = null; // 矛盾してたら形態をリセット
+            }
+        }
+
+        // --- チェックここまで ---
+
+
 
         // 1. Eager Loadingでリレーション先をまとめて取得
         $itemQuery = RandomItem::with(['edition.disc']);
 
-        // 2. 形態(Edition)での絞り込み（連動）
+        // 2. 段階的な絞り込みロジック
         if ($editionId) {
+            // 【優先1】形態まで選ばれていたら、その形態で絞り込む
             $itemQuery->where('edition_id', $editionId);
+        } elseif ($discId) {
+            // 【優先2】形態はないけど円盤があるなら、その円盤に紐づく全形態のアイテムを出す
+            $itemQuery->whereHas('edition', function ($q) use ($discId) {
+                $q->where('disc_id', $discId);
+            });
+        } elseif ($artist) {
+            // 【優先3】アーティストだけなら、そのアーティストの全アイテムを出す
+            $itemQuery->whereHas('edition.disc', function ($q) use ($artist) {
+                $q->where('artist', $artist);
+            });
+        } else {
+            // 【初期状態】何も選ばれていない時は「非表示」にしたい場合
+            // 存在しないIDを指定するなどして、空の結果を返すようにする
+            $itemQuery->where('id', 0);
         }
 
-        // 3. アイテム種別(Type)での絞り込み（同マスタ内）
+        // 3. アイテム種別・メンバー別での絞り込み（同マスタ内）
+        if ($member) {
+            $itemQuery->where('member_name', $member);
+        }
+
+        $availableTypes = [];
+        if ($artist) {
+            // type で絞り込む前のクエリから、今選んでいる範囲の全 type を取得
+            $availableTypes = (clone $itemQuery)->pluck('item_type')->unique()->values()->toArray();
+        }
+
         if ($request->filled('type')) {
             $itemQuery->where('item_type', 'LIKE', '%' . $type . '%');
         }
@@ -174,11 +224,23 @@ class RandomController extends Controller
 
             'edition_info' => $editionInfo,
             'items' => $displayData,
+            'members' => $member,
             'selected_type' => $type,
+            'available_types' => $availableTypes,
+            'selected_artist' => $artist, // フロント側でセレクトボックスに bind するために渡すと便利！
+            'selected_disc'   => $discId,
+            'selected_edition' => $editionId,
 
             'artists' => Disc::select('artist')->distinct()->pluck('artist'), // 重複なしの全アーティスト
-            'discs'   => Disc::when($artist, fn($q) => $q->where('artist', $artist))->get(), // アーティストで絞った円盤
-            'editions' => Edition::when($discId, fn($q) => $q->where('disc_id', $discId))->get(), // 円盤で絞った形態
+            // $artistがない時は空配列を返すようにして、絞り込みを強制する
+            'discs'   => $artist
+                ? Disc::where('artist', $artist)->get()
+                : [],
+
+            // $discIdがない時は空配列を返す
+            'editions' => $discId
+                ? Edition::where('disc_id', $discId)->get()
+                : [],
 
         ]);
     }

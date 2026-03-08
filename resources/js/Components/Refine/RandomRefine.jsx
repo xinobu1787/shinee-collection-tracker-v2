@@ -10,7 +10,8 @@ export default function RandomRefine({
   discs,
   selected_disc,
   editions,
-  selected_type,
+  selected_edition,
+  available_types,
   filters,
   setFilters
 }) {
@@ -48,6 +49,17 @@ export default function RandomRefine({
     });
   };
 
+  const typeOptionsToDisplay = typeOptions.filter(opt => {
+    if (opt.value === '') return true;
+
+    return available_types.some(dbValue => dbValue.includes(opt.value));
+  });
+
+  console.log('--- Filter Debug ---');
+  console.log('1. Laravelから届いた raw data:', available_types);
+  console.log('2. 現在の filters.selected_type:', filters.selected_type);
+  console.log('3. 最終的な options の中身:', typeOptionsToDisplay);
+
   return (
     <div>
       <div className="mx-4 my-2 px-6 py-2">
@@ -56,6 +68,7 @@ export default function RandomRefine({
             {/* アーティスト選択 */}
             <select
               className="select-box"
+              value={selected_artist || ""}
               onChange={handleArtistChange}
             >
               <option value="">Select Artist</option>
@@ -68,6 +81,7 @@ export default function RandomRefine({
             {/* 円盤選択（追加！） */}
             <select
               className="select-box"
+              value={selected_disc || ""}
               onChange={handleDiscChange}
               disabled={!discs || discs.length === 0} // 円盤がない時はお休み
             >
@@ -79,15 +93,16 @@ export default function RandomRefine({
               ))}
             </select>
 
-            {/* 形態選択（追加！） */}
+            {/* 形態選択 */}
             <select
               className="select-box"
               onChange={handleEditionChange}
+              value={selected_edition || ""}
               disabled={!editions || editions.length === 0} // 円盤がない時はお休み
             >
               <option value="">Select Edition</option>
               {editions && editions.map((ed) => (
-                <option key={ed.id} value={ed.id}>{ed.display_name}</option>
+                <option key={ed.id} value={ed.id}>{ed.display_name || '通常盤'}</option>
               ))}
             </select>
           </div>
@@ -98,13 +113,31 @@ export default function RandomRefine({
         <FilterButton
           options={memberOptions}
           value={filters.member}
-          onChange={(val) => setFilters({ ...filters, member: val })}
+          onChange={(val) => {
+            setFilters({ ...filters, member: val });
+            router.get('/random-dev', {
+              artist: selected_artist,
+              disc_id: selected_disc,
+              edition_id: selected_edition,
+              member: val,              // ここが最新のメンバー
+              type: filters.selected_type // タイプは現在のStateを維持
+            }, { preserveState: true, replace: true });
+          }}
         />
 
         <FilterButton
-          options={typeOptions}
+          options={typeOptionsToDisplay}
           value={filters.selected_type}
-          onChange={(val) => setFilters({ ...filters, selected_type: val })}
+          onChange={(val) => {
+            setFilters({ ...filters, selected_type: val });
+            router.get('/random-dev', {
+              artist: selected_artist,
+              disc_id: selected_disc,
+              edition_id: selected_edition,
+              member: filters.member, // メンバーは現在のStateを維持
+              type: val               // ここが最新のタイプ
+            }, { preserveState: true, replace: true });
+          }}
         />
       </div>
 

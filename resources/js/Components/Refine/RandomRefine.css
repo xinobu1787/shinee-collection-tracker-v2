@@ -10,7 +10,9 @@
     font-size: 1rem;
     color: #555;
     cursor: pointer;
-    min-width: 8rem;
-    width: 100%;
+    width: 30rem;           /* 100%をやめて、固定の幅にする */
+    max-width: 90vw;        /* スマホで画面からはみ出さないための保険 */
+    /*min-width: 8rem;
+    width: 100%;*/
     box-shadow: var(--card-shadow);
 }

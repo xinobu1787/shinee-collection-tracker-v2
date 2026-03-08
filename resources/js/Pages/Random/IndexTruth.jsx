@@ -12,10 +12,15 @@ export default function IndexTruth({
   auth,
   edition_info,
   items,
+  members,
   artists,
   discs,
   editions,
-  selected_type
+  selected_artist,
+  selected_disc,
+  selected_edition,
+  selected_type,
+  available_types
 }) {
 
   console.log('届いたお宝(items):', items);
@@ -24,8 +29,8 @@ export default function IndexTruth({
 
   // 2. フィルタリング状態: 
   const [filters, setFilters] = useState({
-    member: '',
-    selected_type: '',
+    member: members || '',
+    selected_type: selected_type || '',
   });
 
   return (
@@ -41,9 +46,13 @@ export default function IndexTruth({
       {/* フィルタリング・ソート */}
       <RandomRefine
         artists={artists}
+        selected_artist={selected_artist}
         discs={discs}
+        selected_disc={selected_disc}
         editions={editions}
+        selected_edition={selected_edition}
         selected_type={selected_type}
+        available_types={available_types}
         filters={filters}
         setFilters={setFilters}
       />
