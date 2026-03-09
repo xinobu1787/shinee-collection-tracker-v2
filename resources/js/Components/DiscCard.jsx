@@ -3,7 +3,7 @@ import React from "react";
 export default function DiscCard({ disc, onClick }) {
     return (
         <div 
-            className="bg-white p-5 rounded-full flex justify-between items-center border border-white hover:border-[var(--member-color)] transition-all cursor-pointer group group-shadow-[var(--card-shadow)]"
+            className="bg-white p-5 rounded-full flex justify-between items-center border border-gray-200 hover:border-[var(--member-color)] transition-all cursor-pointer group group-shadow-[var(--card-shadow)]"
             onClick={onClick}
         >
             {/* 左側：メインタイトル */}

@@ -5,7 +5,7 @@ import MypickCard from './MypickCard';
 
 export default function MypickSection({ items, selected, memberConfig }) {
 
-  const [selectedMembers, setSelectedMembers] = useState([selected]);
+  const [selectedMembers, setSelectedMembers] = useState(selected || []);
 
   const handleMemberToggle = (name) => {
     let newSelection;
@@ -31,7 +31,7 @@ export default function MypickSection({ items, selected, memberConfig }) {
 
   return (
     <BaseCard title="Mypick Collection">
-      {/* 顔文字を使用したマルチセレクター */}
+      {/* 顔文字を使用したマルチセレクトボタン */}
       <div className="flex flex-wrap justify-center gap-2 my-4">
         {memberConfig.map((m) => (
           <button
@@ -40,7 +40,7 @@ export default function MypickSection({ items, selected, memberConfig }) {
             onClick={() => handleMemberToggle(m.name)}
             className={`kaomoji-chip ${selectedMembers.includes(m.name) ? 'is-active' : ''}`}
           >
-            <span className="text-lg leading-none">{m.emoji}</span>
+            <span className="text-base leading-none">{m.emoji}</span>
           </button>
         ))}
       </div>
@@ -59,11 +59,28 @@ export default function MypickSection({ items, selected, memberConfig }) {
           </div>
         ) : (
           /* --- メンバー選択時のカードグリッド --- */
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 w-full">
-            {items.map((item) => (
-              <div key={item.item_id} className="mypick-card">
-                {/* 4:3の枠と所持状況（grayscale）のロジックをここに */}
-                <MypickCard item={item} />
+          <div>
+            {Object.values(items).map((group) => (
+              <div key={group[0].edition_id} className="mb-8">
+
+                {/* 見出し：1つの形態につき1回だけ表示 */}
+                <div className="mb-2 border-b border-[#81d4af]/30 pb-1">
+                  <span className="text-[1.2rem] font-bold text-gray-700">
+                    {group[0].parent_info.disc_title}
+                  </span>
+                  <span className="text-[1rem] ml-2 text-gray-500">
+                    {group[0].parent_info.edition_name}
+                  </span>
+                </div>
+
+                {/* その形態に属するアイテム（画像）を並べる */}
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 w-full">
+                  {group.map((item) => (
+                    <div key={item.item_id} className="mypick-card">
+                      <MypickCard item={item} />
+                    </div>
+                  ))}
+                </div>
               </div>
             ))}
           </div>

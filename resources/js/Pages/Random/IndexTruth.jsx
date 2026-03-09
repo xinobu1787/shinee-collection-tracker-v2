@@ -9,7 +9,6 @@ import InputError from '@/Components/Breeze/InputError';
 
 export default function IndexTruth({
   auth,
-  edition_info,
   items,
   members,
   artists,
@@ -19,7 +18,8 @@ export default function IndexTruth({
   selected_disc,
   selected_edition,
   selected_type,
-  available_types
+  available_types,
+  errors
 }) {
 
   console.log('届いたお宝(items):', items);
@@ -83,11 +83,11 @@ export default function IndexTruth({
 
         <div className="grid grid-cols-3 gap-4 p-4">
           {items.length > 0 ? (
-            items.map((item) => (
-              <div key={item.item_id} className="bg-white rounded-2xl shadow-sm border border-[#f0fdf4] overflow-hidden flex flex-col aspect-[3/4]">
+            items.map((item, index) => (
+              <div key={item.item_id} className="bg-white rounded-2xl shadow-sm border border-[var(--base-color)] border-[1px] overflow-hidden flex flex-col ">
 
                 {/* 上部：画像エリア（クリックでアップロード） */}
-                <label className="relative flex-grow cursor-pointer group">
+                <label className="relative flex-grow cursor-pointer group aspect-[3/4]">
                   <input
                     type="file"
                     className="hidden"
@@ -104,12 +104,12 @@ export default function IndexTruth({
                     />
                   ) : (
                     /* 画像がない時：中央に大きく「＋」 */
-                    <div className="w-full h-full bg-gray-50 flex items-center justify-center text-gray-300 group-hover:bg-gray-100 transition-colors">
-                        {isUploading ? (
-                          <span className="animate-spin material-symbols-outlined text-4xl">sync</span>
-                        ) : (
-                          <span className="material-symbols-outlined text-4xl">add</span>
-                        )}
+                    <div className="w-full h-full flex items-center justify-center text-gray-300 group-hover:bg-gray-100 transition-colors">
+                      {isUploading ? (
+                        <span className="animate-spin material-symbols-outlined text-4xl">sync</span>
+                      ) : (
+                        <span className="material-symbols-outlined text-4xl">add</span>
+                      )}
                     </div>
                   )}
 
@@ -122,14 +122,14 @@ export default function IndexTruth({
                 </label>
 
                 {/* 下部：テキスト部分 */}
-                <div className="p-3 bg-white border-t border-gray-50">
-                  <div className="text-[10px] text-gray-400 truncate leading-tight">
+                <div className="p-3 bg-white border-t border-gray-100">
+                  <div className="text-[1rem] text-gray-400 truncate leading-tight">
                     {item.parent_info.edition_name}
                   </div>
-                  <div className="font-bold text-gray-700 text-xs truncate">
+                  <div className="font-bold text-gray-700 text-[1.2rem] truncate">
                     {item.member_name}
                   </div>
-                  <div className="text-[9px] text-mint-600 bg-mint-50 inline-block px-2 py-0.5 rounded-full mt-1">
+                  <div className="text-[1.2rem] block px-2 py-0.5 rounded-full mt-1 text-right">
                     {item.item_type}
                   </div>
 

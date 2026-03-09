@@ -4,14 +4,13 @@ import { Link } from '@inertiajs/react';
 export default function UserNav({ auth }) {
 
   const navLinkClass = `
-    bg-white
-    border-[1px] border-[var(--member-color)]
+    bg-white border
+    border-solid border-[var(--member-color)]
     rounded-[2rem] py-[0.4rem] px-[1rem]
     text-[0.8rem] text-[#666]
     shadow-sm
     transition-all duration-200 ease-in-out
     hover:-translate-y-[1px] hover:bg-[#f0fdfa]
-    focus:outline-none
 `;
 
   return (

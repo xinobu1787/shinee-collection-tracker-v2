@@ -58,19 +58,21 @@ class MyPageController extends Controller
             ->join('editions', 'random_items.edition_id', '=', 'editions.id')
             ->join('discs', 'editions.disc_id', '=', 'discs.id')
             ->orderBy('discs.release_date', 'asc')
+            ->orderBy('random_items.id', 'asc')
             ->select('random_items.*') // ID重複を避ける
             ->get();
 
         // 2. ユーザーがそのアイテムの画像を持っているか取得
         $userItems = UserRandom::where('user_id', $userId)
-            ->whereIn('random_item_id', $masterItems->pluck('id'))
+            ->whereIn('item_id', $masterItems->pluck('id'))
             ->get()
-            ->keyBy('random_item_id');
+            ->keyBy('item_id');
 
         // 3. ランダム管理ページのロジックを活用し、フロントが使いやすい形に整形
         return $masterItems->map(function ($item) use ($userItems) {
             return [
                 'item_id' => $item->id,
+                'edition_id' => $item->edition_id,
                 'member_name' => $item->member_name,
                 'item_type' => $item->item_type,
                 // ラフ画にある「円盤名」「形態名」をセット
@@ -82,7 +84,8 @@ class MyPageController extends Controller
                 // 画像URLがあればセット（なければ null → フロントでグレー表示）
                 'image_url' => $userItems->has($item->id) ? $userItems[$item->id]->image_url : null,
             ];
-        });
+        })
+        ->groupBy('edition_id');
     }
 
     // ウィッシュリスト取得
