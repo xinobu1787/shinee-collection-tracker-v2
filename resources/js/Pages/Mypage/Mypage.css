@@ -69,3 +69,32 @@
 .animate-badge-pop {
   animation: badgePop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
+
+/* カプセル型の顔文字チップ */
+.kaomoji-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border: 1.5px solid var(--member-color, #81d4af);
+  border-radius: 2rem;
+  /* これで両端が丸い楕円になる */
+  padding: 0.4rem 1.2rem;
+  /* 上下を少し詰めるとより場所を取らない */
+  cursor: pointer;
+  box-shadow: var(--card-shadow);
+  transition: all 0.2s ease;
+  min-width: 4.5rem;
+  /* 顔文字がゆったり入る最小幅 */
+}
+
+.kaomoji-chip:hover {
+  transform: translateY(-1px);
+  background-color: #f0fdfa;
+}
+
+/* 選択（Active）時 */
+.kaomoji-chip.is-active {
+  background-color: var(--member-color, #81d4af);
+  color: white;
+}

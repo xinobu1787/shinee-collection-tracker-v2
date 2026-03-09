@@ -5,7 +5,6 @@ import Footer from '@/Components/Footer';
 import UserNav from '@/Components/UserNav';
 import RandomRefine from '@/Components/Refine/RandomRefine';
 import InputError from '@/Components/Breeze/InputError';
-import InputSuccess from '@/Components/InputSuccess';
 
 
 export default function IndexTruth({
@@ -27,11 +26,34 @@ export default function IndexTruth({
   console.log('メニュー(discs):', discs);
   console.log('メニュー(editions):', editions);
 
-  // 2. フィルタリング状態: 
+  // 2. フィルタリング状態:
   const [filters, setFilters] = useState({
     member: members || '',
     selected_type: selected_type || '',
   });
+
+  const [isUploading, setIsUploading] = useState(false);
+
+  // 1. useForm を使わず、router を直接使って身軽に飛ばす
+  const handleUpload = (e, itemId) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // 2. 送信処理（FormData形式で飛ばす）
+    router.post('/random-dev/upload', {
+      image: file,
+      item_id: itemId, // これが重要！どのアイテムの画像か伝える
+    }, {
+      forceFormData: true,  // 画像アップロードには必須
+      preserveState: true,
+      preserveScroll: true, // 1082件あるから、スクロール位置をキープ
+      only: ['items'],
+      // 送信開始時に true にする
+      onBefore: () => setIsUploading(true),
+      // 成功しても失敗しても、終わったら false に戻す
+      onFinish: () => setIsUploading(false),
+    });
+  };
 
   return (
     <div>
@@ -62,12 +84,59 @@ export default function IndexTruth({
         <div className="grid grid-cols-3 gap-4 p-4">
           {items.length > 0 ? (
             items.map((item) => (
-              <div key={item.item_id} className="bg-white p-4 rounded-2xl shadow-sm border border-[#f0fdf4]">
-                <div className="text-[10px] text-gray-400 mb-1">{item.parent_info.edition_name}</div>
-                <div className="font-bold text-gray-700">{item.member_name}</div>
-                <div className="text-xs text-mint-600 bg-mint-50 inline-block px-2 py-0.5 rounded-full mt-1">
-                  {item.item_type}
+              <div key={item.item_id} className="bg-white rounded-2xl shadow-sm border border-[#f0fdf4] overflow-hidden flex flex-col aspect-[3/4]">
+
+                {/* 上部：画像エリア（クリックでアップロード） */}
+                <label className="relative flex-grow cursor-pointer group">
+                  <input
+                    type="file"
+                    className="hidden"
+                    accept="image/*"
+                    onChange={(e) => handleUpload(e, item.item_id)}
+                  />
+
+                  {item.user_random?.image_url ? (
+                    /* 画像がある時 */
+                    <img
+                      src={item.user_random.image_url}
+                      alt={item.member_name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    /* 画像がない時：中央に大きく「＋」 */
+                    <div className="w-full h-full bg-gray-50 flex items-center justify-center text-gray-300 group-hover:bg-gray-100 transition-colors">
+                        {isUploading ? (
+                          <span className="animate-spin material-symbols-outlined text-4xl">sync</span>
+                        ) : (
+                          <span className="material-symbols-outlined text-4xl">add</span>
+                        )}
+                    </div>
+                  )}
+
+                  {/* 画像があっても、ホバーした時に出す薄いレイヤー */}
+                  {item.user_random?.image_url && (
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                      <span className="material-symbols-outlined text-white opacity-0 group-hover:opacity-100 text-3xl">cached</span>
+                    </div>
+                  )}
+                </label>
+
+                {/* 下部：テキスト部分 */}
+                <div className="p-3 bg-white border-t border-gray-50">
+                  <div className="text-[10px] text-gray-400 truncate leading-tight">
+                    {item.parent_info.edition_name}
+                  </div>
+                  <div className="font-bold text-gray-700 text-xs truncate">
+                    {item.member_name}
+                  </div>
+                  <div className="text-[9px] text-mint-600 bg-mint-50 inline-block px-2 py-0.5 rounded-full mt-1">
+                    {item.item_type}
+                  </div>
+
+                  {/* 特定のアイテムでエラーが出た時だけ表示されるように制御 */}
+                  <InputError message={errors[`items.${index}.image`] || errors.image} className="mt-2 !text-[10px] leading-tight" />
                 </div>
+
               </div>
             ))
           ) : (

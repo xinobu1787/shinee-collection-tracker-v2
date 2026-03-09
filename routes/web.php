@@ -41,7 +41,7 @@ Route::get('/random', [RandomController::class, 'index'])
     ->middleware(['auth'])
     ->name('random.index');
 
-//開発用
+//開発用：データ表示
 Route::get('/random-dev', [RandomController::class, 'dev'])
     ->middleware(['auth'])
     ->name('random.dev');
@@ -51,10 +51,20 @@ Route::post('/random', [RandomController::class, 'store'])
     ->middleware(['auth'])
     ->name('random.store');
 
+// --- 開発用：データ登録 ---
+Route::post('/random-dev/upload', [RandomController::class, 'store'])
+    ->middleware(['auth'])
+    ->name('random-dev.store');
+
 //ランダム管理ページ・データ更新
 Route::patch('/random/{id}', [RandomController::class, 'updateStatus'])
     ->middleware(['auth'])
     ->name('random.update');
+
+// --- 開発用：データ更新（所持ステータスなど） ---
+Route::patch('/random-dev/{id}', [RandomController::class, 'updateStatus'])
+    ->middleware(['auth'])
+    ->name('random-dev.update');
 
 //問い合わせページ・データ表示
 Route::get('/contact', [ContactController::class, 'index'])
