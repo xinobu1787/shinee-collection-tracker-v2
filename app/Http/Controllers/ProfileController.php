@@ -52,9 +52,9 @@ class ProfileController extends Controller
 
                 // 一旦、現在のURL（/s3/ が含まれるもの）を取得
                 $rawUrl = $disk->url($path);
-                // 【ここを追加！】/s3/ を /object/public/ に置換して、表示用のURLにする
+                // /s3/ を /object/public/ に置換して、表示用のURLにする
                 $user->icon_url = str_replace('/s3/', '/object/public/', $rawUrl);
-                
+
             }
 
             $user->save();

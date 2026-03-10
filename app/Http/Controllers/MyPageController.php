@@ -58,7 +58,7 @@ class MyPageController extends Controller
             ->join('editions', 'random_items.edition_id', '=', 'editions.id')
             ->join('discs', 'editions.disc_id', '=', 'discs.id')
             ->orderBy('discs.release_date', 'asc')
-            ->orderBy('random_items.id', 'asc')
+            ->orderBy('editions.sort_id', 'asc')
             ->select('random_items.*') // ID重複を避ける
             ->get();
 

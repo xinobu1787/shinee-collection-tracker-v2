@@ -1,8 +1,8 @@
 import React from 'react';
-import BaseCard from './BaseCard'; // BaseCardを使っている場合
+import BaseCard from './BaseCard';
 
 export default function BadgeSection({ status }) {
-  // バッジ表示用のマスタデータ（ここにお引越し！）
+  // バッジ表示用のマスタデータ
   const badgeMaster = [
     { id: 'hello', name: 'Hello', icon: 'waving_hand' },
     { id: 'odd', name: 'Odd', icon: 'wb_sunny' },
@@ -16,7 +16,7 @@ export default function BadgeSection({ status }) {
       {/* バッジを並べるコンテナ */}
       <div className="flex flex-wrap justify-center gap-6 p-4 w-full">
         {badgeMaster.map((m) => {
-          // サーバーからの $status['badges'] の中身を参照して判定！
+          // サーバーからの $status['badges'] の中身を参照して判定
           const isUnlocked = status.badges?.[m.id] || false;
 
           return (

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { router } from '@inertiajs/react'; // routerを忘れずに！
-import BaseCard from './BaseCard';
-import MypickCard from './MypickCard';
+import { router } from '@inertiajs/react';
+import BaseCard from '../BaseCard';
+import MypickCard from '../MypickCard';
 
 export default function MypickSection({ items, selected, memberConfig }) {
 
@@ -19,13 +19,13 @@ export default function MypickSection({ items, selected, memberConfig }) {
     setSelectedMembers(newSelection);
 
     // Inertiaでサーバーにリクエストを送る
-    // 'members' というキーで配列をそのまま飛ばせる
+    // 'members' というキーで配列をそのまま飛ばす
     router.get('/mypage', {
       members: newSelection
     }, {
-      preserveState: true, // 入力状態をキープ
+      preserveState: true,  // 入力状態をキープ
       preserveScroll: true, // スクロール位置を維持
-      replace: true        // 履歴がメンバー選ぶたびに増えないようにする
+      replace: true         // 履歴がメンバー選ぶたびに増えないようにする
     });
   };
 

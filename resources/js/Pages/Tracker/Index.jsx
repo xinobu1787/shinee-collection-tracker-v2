@@ -4,7 +4,7 @@ import Header from '@/Components/Header';
 import Footer from '@/Components/Footer';
 import DiscCard from '@/Components/DiscCard';
 import DiscModal from '@/Components/DiscModal/DiscModal';
-import DiscRefine from '@/Components/DiscRefine';
+import DiscRefine from '@/Components/Refine/DiscRefine';
 import UserNav from '@/Components/UserNav';
 
 export default function Index({ auth, discs }) {
@@ -28,7 +28,7 @@ export default function Index({ auth, discs }) {
         setIsModalOpen(true);
     };
 
-    // --- フィルタリング処理 ---
+    /* --- フィルタリング処理 --- */
     // Laravelから届いた全データを、ユーザーが選択した条件で絞り込む
     const filteredDiscs = discs.filter(disc => {
         const matchArtist = filters.artist === 'All' || disc.artist === filters.artist;
@@ -55,7 +55,7 @@ export default function Index({ auth, discs }) {
         return matchArtist && matchCountry && matchCategory && matchPurchased;
     });
 
-    // --- ソート処理 ---
+    /* --- ソート処理 --- */
     // 絞り込み後のデータを、新しい順/古い順に並び替え
     const sortedDiscs = [...filteredDiscs].sort((a, b) => {
         const dateA = new Date(a.release_date);

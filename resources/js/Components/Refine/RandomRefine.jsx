@@ -5,20 +5,15 @@ import { router } from '@inertiajs/react';
 import './RandomRefine.css'
 
 export default function RandomRefine({
-  artists,
-  selected_artist,
-  discs,
-  selected_disc,
-  editions,
-  selected_edition,
-  available_types,
-  filters,
-  setFilters
+  artists, selected_artist,
+  discs, selected_disc,
+  editions, selected_edition,
+  available_types, filters, setFilters
 }) {
 
   // アーティストが選ばれた時の処理（URLを書き換えてリロードする）
   const handleArtistChange = (e) => {
-    router.get('/random-dev', { artist: e.target.value }, {
+    router.get('/random', { artist: e.target.value }, {
       preserveState: true, // 入力状態をキープ
       replace: true        // 戻るボタンの履歴を増やしすぎない
     });
@@ -27,7 +22,7 @@ export default function RandomRefine({
   // 円盤を選んだ時の処理
   const handleDiscChange = (e) => {
     // アーティストは今の値をキープしつつ、選んだ円盤IDを追加して送る
-    router.get('/random-dev', {
+    router.get('/random', {
       artist: selected_artist, // 現在のアーティスト
       disc_id: e.target.value
     }, {
@@ -39,7 +34,7 @@ export default function RandomRefine({
   // 形態を選んだ時の処理
   const handleEditionChange = (e) => {
     // アーティストは今の値をキープしつつ、選んだ円盤IDを追加して送る
-    router.get('/random-dev', {
+    router.get('/random', {
       artist: selected_artist, // 現在のアーティスト
       disc_id: selected_disc,
       edition_id: e.target.value
@@ -72,13 +67,13 @@ export default function RandomRefine({
               onChange={handleArtistChange}
             >
               <option value="">Select Artist</option>
-              {/* Laravelから届いた artists (6人) をループで回して選択肢にする */}
+              {/* Laravelから届いた artistsをループで回して選択肢にする */}
               {artists && artists.map((name) => (
                 <option key={name} value={name}>{name}</option>
               ))}
             </select>
 
-            {/* 円盤選択（追加！） */}
+            {/* 円盤選択 */}
             <select
               className="select-box"
               value={selected_disc || ""}
@@ -115,12 +110,12 @@ export default function RandomRefine({
           value={filters.member}
           onChange={(val) => {
             setFilters({ ...filters, member: val });
-            router.get('/random-dev', {
+            router.get('/random', {
               artist: selected_artist,
               disc_id: selected_disc,
               edition_id: selected_edition,
-              member: val,              // ここが最新のメンバー
-              type: filters.selected_type // タイプは現在のStateを維持
+              member: val,                  // ここが最新のメンバー
+              type: filters.selected_type   // タイプは現在のStateを維持
             }, { preserveState: true, replace: true });
           }}
         />
@@ -130,7 +125,7 @@ export default function RandomRefine({
           value={filters.selected_type}
           onChange={(val) => {
             setFilters({ ...filters, selected_type: val });
-            router.get('/random-dev', {
+            router.get('/random', {
               artist: selected_artist,
               disc_id: selected_disc,
               edition_id: selected_edition,

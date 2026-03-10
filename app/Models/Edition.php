@@ -19,6 +19,7 @@ class Edition extends Model
         'benefit',
         'video_content',
         'remarks',
+        'sort_id',
     ];
 
     public function disc()

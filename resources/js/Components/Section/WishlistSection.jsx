@@ -1,5 +1,5 @@
 import React from 'react';
-import BaseCard from './BaseCard';
+import BaseCard from '../BaseCard';
 
 export default function WishlistSection({ wishlist }) {
   return (

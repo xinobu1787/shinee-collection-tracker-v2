@@ -23,6 +23,7 @@ return new class extends Migration
             $table->text('benefit')->nullable();
             $table->text('video_content')->nullable();
             $table->text('remarks')->nullable();
+            $table->integer('sort_id')->unique();
             $table->timestamps();
         });
     }

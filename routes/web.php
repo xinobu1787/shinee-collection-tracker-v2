@@ -14,9 +14,12 @@ Route::get('/', function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile', [ProfileController::class, 'edit'])
+        ->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])
+        ->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])
+        ->name('profile.destroy');
 });
 
 require __DIR__ . '/auth.php';
@@ -41,30 +44,10 @@ Route::get('/random', [RandomController::class, 'index'])
     ->middleware(['auth'])
     ->name('random.index');
 
-//開発用：データ表示
-Route::get('/random-dev', [RandomController::class, 'dev'])
-    ->middleware(['auth'])
-    ->name('random.dev');
-
-//ランダム管理ページ・データ登録
+//ランダム管理ページ・データ登録更新
 Route::post('/random', [RandomController::class, 'store'])
     ->middleware(['auth'])
     ->name('random.store');
-
-// --- 開発用：データ登録 ---
-Route::post('/random-dev/upload', [RandomController::class, 'store'])
-    ->middleware(['auth'])
-    ->name('random-dev.store');
-
-//ランダム管理ページ・データ更新
-Route::patch('/random/{id}', [RandomController::class, 'updateStatus'])
-    ->middleware(['auth'])
-    ->name('random.update');
-
-// --- 開発用：データ更新（所持ステータスなど） ---
-Route::patch('/random-dev/{id}', [RandomController::class, 'updateStatus'])
-    ->middleware(['auth'])
-    ->name('random-dev.update');
 
 //問い合わせページ・データ表示
 Route::get('/contact', [ContactController::class, 'index'])

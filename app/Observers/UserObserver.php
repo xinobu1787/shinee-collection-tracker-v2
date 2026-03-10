@@ -13,7 +13,7 @@ class UserObserver
         // 1. icon_url が変更されるかチェック
         if ($user->isDirty('icon_url')) {
 
-            // 2. 変更前の「古いURL」を取得
+            // 2. 変更前の古いURLを取得
             $oldUrl = $user->getOriginal('icon_url');
 
             if ($oldUrl) {

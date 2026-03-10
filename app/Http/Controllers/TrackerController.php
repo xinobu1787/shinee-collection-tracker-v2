@@ -15,7 +15,10 @@ class TrackerController extends Controller
     {
         // ディスク情報に加え、形態ごとの「ユーザー所持状態」をEager Loadingで一括取得
         // N+1問題を回避し、Spring Boot版にはなかったユーザー別管理を実現
-        $discs = Disc::latestOrder()->with('editions.userStatus')
+        $discs = Disc::latestOrder()
+            ->with(['editions' => function ($query) {
+                $query->orderBy('sort_id', 'asc')->with('userStatus');
+            }])
             ->get();
 
         return Inertia::render('Tracker/Index', [
@@ -51,7 +54,6 @@ class TrackerController extends Controller
             // 3. ユーザーへのフィードバック（成功時）
             // Inertiaのフラッシュメッセージとしてフロントエンドに通知
             return back()->with('success', 'フラグを更新しました！');
-
         } catch (\Exception $e) {
             // 4. エラーハンドリングと可視化
             // ログを残すことで、本番環境でのトラブルシューティングを容易にする

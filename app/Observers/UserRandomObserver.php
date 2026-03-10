@@ -16,7 +16,7 @@ class UserRandomObserver
         // 1. image_url が変更されるかチェック
         if ($userRandom->isDirty('image_url')) {
 
-            // 2. 変更前の「古いURL」を取得
+            // 2. 変更前の古いURLを取得
             $oldUrl = $userRandom->getOriginal('image_url');
 
             if ($oldUrl) {

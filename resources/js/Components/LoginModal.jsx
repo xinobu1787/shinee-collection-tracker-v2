@@ -7,7 +7,6 @@ export default function LoginModal({ show, onClose }) {
     if (!show) return null; // showがfalseなら何も出さない
 
     return (
-        // z-indexを2000にして、既存のディスクモーダル(1000)より確実に上に持ってくる
         <div className="fixed inset-0 z-[2000] flex items-center justify-center bg-black/50 backdrop-blur-sm" onClick={onClose}>
             {/* 白い箱部分：stopPropagationでクリックしても閉じないようにする */}
             <div

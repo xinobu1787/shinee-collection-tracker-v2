@@ -33,7 +33,7 @@ export default function DiscModal({ isOpen, onClose, disc }) {
         }
     };
 
-    // discの中にぶら下がっている形態（editions）を取り出す
+    // discの中にぶら下がっている形態editionsを取り出す
     const editions = disc.editions || [];
 
     //ログインガード機能
@@ -69,7 +69,6 @@ export default function DiscModal({ isOpen, onClose, disc }) {
                     <div className="mt-4">
                         {editions.map((ed) => (
                             <div key={ed.id}>
-                                {/* labelを使うことでBOX全体をチェック可能にするJava版を継承 */}
                                 <label className="edition-box">
                                     {/* 所持チェック入力
                                         router.patch を使用し、非同期でサーバーへ状態を送信。
@@ -80,14 +79,14 @@ export default function DiscModal({ isOpen, onClose, disc }) {
                                         className="purchase-checkbox"
                                         checked={ed.user_status?.is_purchased} // 所持状態
                                         onChange={(e) => {
-                                            e.stopPropagation(); // ←詳細モーダルまで反応してしまう場合まず親への伝播を止める
+                                            e.stopPropagation();               // 詳細モーダルまで反応してしまう場合まず親への伝播を止める
                                             checkAuthAndExecute(() => {
                                                 router.patch(route('tracker.update'), {
                                                     edition_id: ed.id,
                                                     is_purchased: !ed.user_status?.is_purchased,
                                                     is_wishlist: !!ed.user_status?.is_wishlist // 今の状態を維持
                                                 }, {
-                                                    preserveScroll: true, // 画面がガクッと動かないようにする
+                                                    preserveScroll: true,      // 画面がガクッと動かないようにする
                                                 });
                                             })
                                         }}

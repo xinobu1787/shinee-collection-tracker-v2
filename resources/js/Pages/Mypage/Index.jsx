@@ -5,12 +5,15 @@ import Header from '@/Components/Header';
 import Footer from '@/Components/Footer';
 import UserInfoCard from '@/Components/UserInfoCard';
 import UserNav from '@/Components/UserNav';
-import ProgressSection from '@/Components/ProgressSection';
-import BadgeSection from '@/Components/BadgeSection';
-import WishlistSection from '@/Components/WishlistSection';
-import MypickSection from '@/Components/MypickSection';
+import ProgressSection from '@/Components/Section/ProgressSection';
+import BadgeSection from '@/Components/Section/BadgeSection';
+import WishlistSection from '@/Components/Section/WishlistSection';
+import MypickSection from '@/Components/Section/MypickSection';
 
-export default function Index({ auth, status, wishlist, mypick_items,selected_members }) {
+export default function Index({
+  auth, status, wishlist,
+  mypick_items, selected_members
+}) {
 
   // メンバー名と顔文字の対応表
   const memberConfig = [

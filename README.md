@@ -1,59 +1,96 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# SHINee Collection Tracker v2.0 (Laravel版) 💎
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+SHINeeのCD・グッズコレクションを管理・可視化するためのWebアプリケーションです。
+Spring Boot(Java)版でのプロトタイプ開発を経て、実用性とユーザー体験、保守性を大幅に向上させたリプレイス版として開発しました。
 
-## About Laravel
+---
+### 🔗 関連リポジトリ
+- **[Spring Boot(Java)版 プロトタイプはこちら](https://github.com/xinobu1787/shinee-collection-tracker)**
+  ※本リポジトリは、上記プロトタイプをベースに全機能をリプレイスした「Version 2.0」です。
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 🌟 主な機能
 
-## Learning Laravel
+### 1. 圧倒的なデータ網羅率を誇る「トラッカーページ」
+- **詳細データの保持**: SHINeeのグループ作品から各ソロ活動まで、形態別のトラックリスト・当時の価格・特典内容を完全に網羅。
+- **直感的な操作**: タップ一つで所持未所持の切り替えと、ウィッシュリストへの登録解除が可能。ファンが手軽にコレクションを記録できるUIを追求。
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### 2. 進捗を可視化する「マイページ」
+- **ダッシュボード**: 全体の収集率をプログレスバーで表示。
+- **パーソナライズ表示**: 自分が登録したウィッシュリストや、ランダムアイテム管理で登録した画像を、メンバー別に一覧で閲覧可能。
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 3. 未所持も把握できる「ランダム管理ページ」
+- **マスタ検索・登録**: 特典のランダム品のマスタから、持っているものを検索・登録。
+- **画像管理**: 自分が手に入れたアイテムの画像をアップロードし、視覚的にコレクションを管理。
 
-## Laravel Sponsors
+### 4. ユーザーサポート（問い合わせ・FAQ）
+- **FAQ連携**: よくある質問への回答と、DBへ直接送信される問い合わせフォームを完備。実運用を想定したエラーハンドリングとバリデーションを実装。
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
 
-### Premium Partners
+## 🚀 Java版(v1.0)からの主要な変更・改善点
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+前作の課題をエンジニア視点で分析し、以下の通り大幅な刷新を行いました。
 
-## Contributing
+### 1. 設計・ドキュメントの整備
+- **SpringBoot版**: 設計書なし。
+- **Laravel版**: **各種設計書の作成（DB定義、ER図、画面遷移図、CRUD図、移行計画書等）**。開発工程を可視化し、一貫性のある実装を実現。
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 2. ユーザー別管理機能の導入
+- **SpringBoot版**: ログイン機能がなく、全ユーザー共通のデータを閲覧する仕様。
+- **Laravel版**: **Laravel Breeze**を採用した認証機能を実装。ユーザーごとに独立したアカウントを持てるようになり、自分専用の所持状況やウィッシュリストの保存・管理が可能に。
 
-## Code of Conduct
+### 3. ランダム管理ページの高度化
+- **SpringBoot版**: 自分が手動登録したアイテムのみが表示される仕様。
+- **Laravel版**: **ランダムアイテムのマスタデータを構築**。絞り込み機能で選択したアイテムを一覧表示し、ひと目で分かるコレクター目線での管理機能へ進化。
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 4. 問い合わせフォームのDB連携
+- **SpringBoot版**: 送信ボタンを押しても通知が出るだけのダミー機能。
+- **Laravel版**: Contactsテーブルを新設。入力内容がバリデーションを経てDBへ確実に保存される実運用可能なフローへ改善。
 
-## Security Vulnerabilities
+### 5. DB設計の最適化とセキュリティ向上
+- **SpringBoot版**: マスタデータ3テーブルのみ。
+- **Laravel版**: ユーザー別管理機能を導入するにあたり付随するテーブルを新設。ユーザーがマスタを直接更新できない構造に分離し、**データの整合性とセキュリティを大幅に向上**。
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 6. フロントエンドの刷新 (React/Inertia.js)
+- **SpringBoot版**: HTML/CSS/Vanilla JS による命令的なUI制御。
+- **Laravel版**: **React + Inertia.js** を導入しコンポーネント化。SPAのような滑らかな操作感を提供しつつ、コードの保守性を飛躍的に向上。
 
-## License
+## 🛠 技術スタック
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### バックエンド
+- **PHP 8.5.x / Laravel 12.50.0**
+- **Supabase (PostgreSQL)**
+- **Supabase Storage** (画像データの永続化)
+
+### フロントエンド
+- **React / Inertia.js**
+- **Tailwind CSS** (レスポンシブ設計の徹底)
+
+## 📊 データベース設計
+
+リプレイスにあたり、SpringBoot版の設計をベースにしつつ、ユーザー別ステータス管理に対応した拡張を行いました。
+※詳細は `/docs` フォルダ内の各設計書を参照。
+
+## 💎 こだわりポイント
+
+### 徹底したデータ整列ロジック
+DB移植時に、自動採番等で順番が入れ替わってしまう形態マスタに対し、独自の `sort_id` を導入。手作業で215件のデータを整理し、 **SpringBoot版で構築したこだわりの表示順を、Laravel環境でも完全に再現** しました。
+
+### 環境に依存しない開発体制
+- 自宅: **Docker (Laravel Sail) / WSL2**
+- 訓練校: **PHP直インストール環境**
+GitHubを通じたコード共有と、環境ごとの差異（npmの有無等）を考慮した柔軟な開発フローを確立。
+
+## 🚀 今後の展望
+リプレイスによる基礎構築が完了したため、今後は以下の機能を順次実装予定です。
+
+- 映像作品（DVD/Blu-ray）へのデータ拡張
+  現在はCD（シングル・アルバム）がメインですが、映像作品のマスタデータを追加し、コレクション全体の網羅性を高めます。
+
+- 検索・フィルタリング機能の高度化
+  アイテム数が増加しても目的のデータに素早くアクセスできるよう、キーワード検索や詳細な絞り込みロジックを強化します。
+
+- パフォーマンスの最適化
+  データ取得クエリの精査やキャッシュの活用により、さらなる高速なレスポンスを目指します。
