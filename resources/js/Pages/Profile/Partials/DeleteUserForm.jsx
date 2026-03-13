@@ -47,35 +47,33 @@ export default function DeleteUserForm({ className = '' }) {
 
     return (
         <section className={`space-y-6 ${className}`}>
-            <header>
-                <h2 className="text-lg font-medium text-gray-900">
-                    Delete Account
-                </h2>
-
-                <p className="mt-1 text-sm text-gray-600">
-                    Once your account is deleted, all of its resources and data
-                    will be permanently deleted. Before deleting your account,
-                    please download any data or information that you wish to
-                    retain.
+            <div>
+                <p className="text-sm text-gray-600">
+                    退会すると、これまでのコレクションデータがすべて削除されます。
                 </p>
-            </header>
+            </div>
 
             <DangerButton onClick={confirmUserDeletion}>
-                Delete Account
+                退会する
             </DangerButton>
 
             <Modal show={confirmingUserDeletion} onClose={closeModal}>
                 <form onSubmit={deleteUser} className="p-6">
                     <h2 className="text-lg font-medium text-gray-900">
-                        Are you sure you want to delete your account?
+                        本当に退会しますか？
                     </h2>
 
                     <p className="mt-1 text-sm text-gray-600">
-                        Once your account is deleted, all of its resources and
-                        data will be permanently deleted. Please enter your
-                        password to confirm you would like to permanently delete
-                        your account.
+                        一度削除したアカウントやコレクションデータは、二度と復元できません。<br />
+                        続行するにはパスワードを入力してください。
                     </p>
+
+                    {/* ★ ここにシステムエラー（try-catchで投げたもの）を表示する */}
+                    {errors.error && (
+                        <div className="mt-4">
+                            <InputError message={errors.error} className="mt-2" />
+                        </div>
+                    )}
 
                     <div className="mt-6">
                         <InputLabel
@@ -95,7 +93,7 @@ export default function DeleteUserForm({ className = '' }) {
                             }
                             className="mt-1 block w-3/4"
                             isFocused
-                            placeholder="Password"
+                            placeholder="パスワード"
                         />
 
                         <InputError
@@ -106,11 +104,11 @@ export default function DeleteUserForm({ className = '' }) {
 
                     <div className="mt-6 flex justify-end">
                         <SecondaryButton onClick={closeModal}>
-                            Cancel
+                            キャンセル
                         </SecondaryButton>
 
                         <DangerButton className="ms-3" disabled={processing}>
-                            Delete Account
+                            退会を確定する
                         </DangerButton>
                     </div>
                 </form>

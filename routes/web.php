@@ -60,3 +60,7 @@ Route::post('/contact', [ContactController::class, 'store'])
 //問い合わせページ・リダイレクト
 Route::get('/contact/send', [ContactController::class, 'thanks'])
     ->name('contact.thanks');
+
+//退会処理後リダイレクト
+Route::get('/thanks', [ProfileController::class, 'thanks'])
+    ->name('thanks');

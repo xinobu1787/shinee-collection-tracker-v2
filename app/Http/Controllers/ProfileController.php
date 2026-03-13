@@ -54,7 +54,6 @@ class ProfileController extends Controller
                 $rawUrl = $disk->url($path);
                 // /s3/ を /object/public/ に置換して、表示用のURLにする
                 $user->icon_url = str_replace('/s3/', '/object/public/', $rawUrl);
-
             }
 
             $user->save();
@@ -63,7 +62,6 @@ class ProfileController extends Controller
             // dd($user->toArray());
 
             return Redirect::route('profile.edit');
-
         } catch (\Exception $e) {
             Log::error('プロフィール更新失敗: ' . $e->getMessage());
             return back()->withErrors(['error' => '更新に失敗しました。']);
@@ -81,13 +79,26 @@ class ProfileController extends Controller
 
         $user = $request->user();
 
-        Auth::logout();
+        try {
+            Auth::logout();
 
-        $user->delete();
+            $user->delete();
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
 
-        return Redirect::to('/');
+            return redirect()->route('thanks');
+
+        } catch (\Exception $e) {
+            // 失敗したらログに残して、前の画面に戻す
+            Log::error('退会処理失敗: ' . $e->getMessage());
+            return back()->withErrors(['error' => '退会処理中にエラーが発生しました。']);
+        }
+    }
+
+    //退会完了画面の表示
+    public function thanks()
+    {
+        return Inertia::render('Profile/Thanks');
     }
 }

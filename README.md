@@ -1,11 +1,11 @@
-# SHINee Collection Tracker v2.0 (Laravel版) 💎
+# SHINee Collection Tracker v2.0 💎
 
 SHINeeのCD・グッズコレクションを管理・可視化するためのWebアプリケーションです。
 Spring Boot(Java)版でのプロトタイプ開発を経て、実用性とユーザー体験、保守性を大幅に向上させたリプレイス版として開発しました。
 
 ---
 ### 🔗 関連リポジトリ
-- **[Spring Boot(Java)版 プロトタイプはこちら](https://github.com/xinobu1787/shinee-collection-tracker)**
+- **[Spring Boot(Java)版 v1.0 プロトタイプはこちら](https://github.com/xinobu1787/shinee-collection-tracker)**
   ※本リポジトリは、上記プロトタイプをベースに全機能をリプレイスした「Version 2.0」です。
 
 ---
@@ -29,7 +29,7 @@ Spring Boot(Java)版でのプロトタイプ開発を経て、実用性とユー
 - **FAQ連携**: よくある質問への回答と、DBへ直接送信される問い合わせフォームを完備。実運用を想定したエラーハンドリングとバリデーションを実装。
 
 
-## 🚀 Java版(v1.0)からの主要な変更・改善点
+## 🚀 SpringBoot版(v1.0)からの主要な変更・改善点
 
 前作の課題をエンジニア視点で分析し、以下の通り大幅な刷新を行いました。
 
@@ -68,10 +68,24 @@ Spring Boot(Java)版でのプロトタイプ開発を経て、実用性とユー
 - **React / Inertia.js**
 - **Tailwind CSS** (レスポンシブ設計の徹底)
 
-## 📊 データベース設計
+## 📊 設計ドキュメント
 
+本プロジェクトのリプレイスにあたり、設計の整合性と保守性を担保するため、以下のドキュメントを作成しました。
+詳細は [`/docs`](./docs) フォルダから確認できます。
+
+| ファイル名 | ドキュメント名 | 内容・目的 |
+| :--- | :--- | :--- |
+| [00_README.pdf](./docs/00_README.pdf) | **プロジェクト概要書** | リプレイスの目的、方針、機能一覧の定義 |
+| [01_table_definition.pdf](./docs/01_table_definition.pdf) | **テーブル定義書** | カラム詳細、データ型、制約、論理名の定義 |
+| [02_er_diagram.pdf](./docs/02_er_diagram.pdf) | **ER図** | エンティティ間のリレーションシップの可視化 |
+| [03_routing_screen_flow.pdf](./docs/03_routing_screen_flow.pdf) | **画面遷移図** | ユーザー動線とInertia.jsでのルーティング設計 |
+| [04_crud_matrix.pdf](./docs/04_crud_matrix.pdf) | **CRUD図** | 各機能とDB操作（Create/Read/Update/Delete）の対応 |
+| [05_data_migration_plan.pdf](./docs/05_data_migration_plan.pdf) | **移行計画書** | SpringBoot版からLaravel版へのデータ移行手順の整理 |
+
+## 📊 データベース設計
 リプレイスにあたり、SpringBoot版の設計をベースにしつつ、ユーザー別ステータス管理に対応した拡張を行いました。
-※詳細は `/docs` フォルダ内の各設計書を参照。
+![ER図](./docs/er-diagram.jpg)
+
 
 ## 💎 こだわりポイント
 
