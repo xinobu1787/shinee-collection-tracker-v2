@@ -76,7 +76,7 @@ class RandomController extends Controller
         } else {
             // 【初期状態】何も選ばれていない時は「非表示」にしたい場合
             // 存在しないIDを指定するなどして、空の結果を返すようにする
-            $itemQuery->where('id', 0);
+            $itemQuery->where('random_items.id', 0);
         }
 
         // 3. アイテム種別・メンバー別での絞り込み（同マスタ内）

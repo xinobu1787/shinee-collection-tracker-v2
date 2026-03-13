@@ -59,47 +59,48 @@ export default function DeleteUserForm({ className = '' }) {
 
             <Modal show={confirmingUserDeletion} onClose={closeModal}>
                 <form onSubmit={deleteUser} className="p-6">
-                    <h2 className="text-lg font-medium text-gray-900">
-                        本当に退会しますか？
-                    </h2>
+                    <div className="flex flex-col items-center">
+                        <h2 className="text-xl font-medium text-gray-900">
+                            本当に退会しますか？
+                        </h2>
 
-                    <p className="mt-1 text-sm text-gray-600">
-                        一度削除したアカウントやコレクションデータは、二度と復元できません。<br />
-                        続行するにはパスワードを入力してください。
-                    </p>
+                        <p className="mt-2 text-sm text-gray-600">
+                            一度削除したアカウントやコレクションデータは、二度と復元できません。<br />
+                            続行するにはパスワードを入力してください。
+                        </p>
 
-                    {/* ★ ここにシステムエラー（try-catchで投げたもの）を表示する */}
-                    {errors.error && (
-                        <div className="mt-4">
-                            <InputError message={errors.error} className="mt-2" />
+                        {errors.error && (
+                            <div className="mt-4">
+                                <InputError message={errors.error} className="mt-2" />
+                            </div>
+                        )}
+
+                        <div className="mt-6">
+                            <InputLabel
+                                htmlFor="password"
+                                value="Password"
+                                className="sr-only"
+                            />
+
+                            <TextInput
+                                id="password"
+                                type="password"
+                                name="password"
+                                ref={passwordInput}
+                                value={data.password}
+                                onChange={(e) =>
+                                    setData('password', e.target.value)
+                                }
+                                className="mt-1 block w-[25rem]"
+                                isFocused
+                                placeholder="パスワード"
+                            />
+
+                            <InputError
+                                message={errors.password}
+                                className="mt-2"
+                            />
                         </div>
-                    )}
-
-                    <div className="mt-6">
-                        <InputLabel
-                            htmlFor="password"
-                            value="Password"
-                            className="sr-only"
-                        />
-
-                        <TextInput
-                            id="password"
-                            type="password"
-                            name="password"
-                            ref={passwordInput}
-                            value={data.password}
-                            onChange={(e) =>
-                                setData('password', e.target.value)
-                            }
-                            className="mt-1 block w-3/4"
-                            isFocused
-                            placeholder="パスワード"
-                        />
-
-                        <InputError
-                            message={errors.password}
-                            className="mt-2"
-                        />
                     </div>
 
                     <div className="mt-6 flex justify-end">

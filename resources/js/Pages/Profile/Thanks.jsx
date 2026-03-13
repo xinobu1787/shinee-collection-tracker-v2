@@ -6,7 +6,7 @@ export default function Thanks() {
     <div className="flex min-h-screen flex-col items-center bg-[var(--base-color)] pt-6 sm:justify-center sm:pt-0">
       <Head title="退会完了 - SHINee Collection Tracker" />
       <div>
-        <p className="text-3xl font-bold text-white">
+        <p className="text-6xl font-bold text-white">
           {"THANK YOU ！".split("").map((char, index) => (
             <span
               key={index}
@@ -29,7 +29,7 @@ export default function Thanks() {
           </p>
           <p className="text-gray-600 leading-relaxed">
             退会処理が無事に完了いたしました。<br />
-            これからもアナタだけの素敵なシャヲルライフをお過ごしください。
+            これからもアナタだけの素敵なシャヲルライフをお過ごしください！
           </p>
         </div>
 

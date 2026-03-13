@@ -14,10 +14,6 @@ export default function Index({
   selected_type, available_types, errors
 }) {
 
-  console.log('届いたお宝(items):', items);
-  console.log('メニュー(discs):', discs);
-  console.log('メニュー(editions):', editions);
-
   // フィルタリング状態:
   const [filters, setFilters] = useState({
     member: members || '',
@@ -73,13 +69,13 @@ export default function Index({
 
       <main className="p-6 pb-[7rem] max-w-[1200px] mx-auto">
 
-        <div className="grid grid-cols-3 gap-4 p-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 p-4 max-w-[1200px] mx-auto">
           {items.length > 0 ? (
             items.map((item, index) => (
-              <div key={item.item_id} className="bg-white rounded-2xl shadow-sm border border-[var(--base-color)] border-[1px] overflow-hidden flex flex-col ">
+              <div key={item.item_id} className="bg-white rounded-2xl shadow-sm border border-[var(--base-color)] border-solid overflow-hidden flex flex-col">
 
                 {/* 上部：画像エリア（クリックでアップロード） */}
-                <label className="relative flex-grow cursor-pointer group aspect-[3/4]">
+                <label className="relative w-full cursor-pointer group aspect-[3/4] block">
                   <input
                     type="file"
                     className="hidden"
@@ -87,12 +83,12 @@ export default function Index({
                     onChange={(e) => handleUpload(e, item.item_id)}
                   />
 
-                  {item.user_random?.image_url ? (
+                  {item.image_url ? (
                     /* 画像がある時 */
                     <img
-                      src={item.user_random.image_url}
+                      src={item.image_url}
                       alt={item.member_name}
-                      className="w-full h-full object-cover"
+                      className="absolute inset-0 w-full h-full object-cover"
                     />
                   ) : (
                     /* 画像がない時：中央に大きく「＋」 */
@@ -106,7 +102,7 @@ export default function Index({
                   )}
 
                   {/* 画像があっても、ホバーした時に出す薄いレイヤー */}
-                  {item.user_random?.image_url && (
+                  {item.image_url && (
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
                       <span className="material-symbols-outlined text-white opacity-0 group-hover:opacity-100 text-3xl">cached</span>
                     </div>

@@ -6,7 +6,7 @@ export default function Thanks() {
     <div className="flex min-h-screen flex-col items-center bg-[var(--base-color)] pt-6 sm:justify-center sm:pt-0">
       <Head title="送信完了 - SHINee Collection Tracker" />
       <div>
-        <p className="text-3xl font-bold text-white">
+        <p className="text-6xl font-bold text-white">
           {"THANK YOU ！".split("").map((char, index) => (
             <span
               key={index}

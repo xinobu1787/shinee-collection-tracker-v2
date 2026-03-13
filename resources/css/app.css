@@ -59,6 +59,6 @@
 
 @layer base {
   body {
-    @apply min-h-screen bg-[var(--bg-color)];
+    @apply min-h-screen bg-[var(--member-bg)];
   }
 }

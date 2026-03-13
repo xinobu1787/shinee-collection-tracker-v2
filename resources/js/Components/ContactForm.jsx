@@ -67,7 +67,7 @@ export default function ContactForm() {
           id="body"
           value={data.body}
           placeholder="お問い合わせ内容をご入力ください"
-          className="mt-1 block w-full border-gray-500 focus:border-emerald-500 focus:ring-emerald-500 rounded-md shadow-sm"
+          className="mt-1 block w-full border-solid border-gray-300 focus:border-[var(--base-color)] focus:ring-[var(--base-color)] rounded-md shadow-sm"
           rows="5" // ここで高さを調整
           onChange={(e) => setData('body', e.target.value)}
         ></textarea>
