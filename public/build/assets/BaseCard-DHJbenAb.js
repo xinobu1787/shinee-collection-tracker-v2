@@ -1,0 +1,1 @@
+import{j as r}from"./app-DJpzkwYC.js";function o({title:e,children:s}){return r.jsxs("div",{className:"mx-4 my-4 p-6 bg-white rounded-[2rem] shadow-sm border border-[#e8f5e9]",children:[e&&r.jsx("h2",{className:"text-[#81d4af] font-bold text-xl mb-4",children:e}),s]})}export{o as B};
