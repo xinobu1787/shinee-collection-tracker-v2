@@ -42,4 +42,4 @@ COPY docker/nginx.conf /etc/nginx/http.d/default.conf
 EXPOSE 80
 
 # 起動コマンド
-CMD ["sh", "-c", "nginx && php-fpm"]
+CMD ["sh", "-c", "php-fpm -D && nginx -g 'daemon off;'"]
