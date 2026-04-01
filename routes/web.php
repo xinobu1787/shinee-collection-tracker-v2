@@ -68,6 +68,13 @@ Route::get('/thanks', [ProfileController::class, 'thanks'])
 
 //管理者画面用
 Route::middleware('auth', 'admin')->group(function () {
+    // 閲覧表示用
     Route::get('/admin', [AdminController::class, 'index'])
-    ->name('admin');
+        ->name('admin');
+    //　新規登録画面用
+    Route::get('/admin/create', [AdminController::class, 'create'])
+        ->name('admin.create');
+    // 保存処理用
+    Route::post('/admin', [AdminController::class, 'store'])
+        ->name('admin.store');
 });
