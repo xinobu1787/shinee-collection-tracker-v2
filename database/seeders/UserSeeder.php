@@ -16,17 +16,17 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         $user = User::create([
-            'name' => 'テスト用',
-            'email' => 'test@example.com',
-            'password' => Hash::make('password'),
+            'name' => '管理者',
+            'email' => 'admin@example.com',
+            'password' => Hash::make('adminPW'),
         ]);
 
         // 最初の数件だけ、テスト用に「所持」にしておく
-        UserStatus::create([
-            'user_id' => $user->id,
-            'edition_id' => 101, // 存在するIDを適当に
-            'is_purchased' => true,
-            'is_wishlist' => false,
-        ]);
+        // UserStatus::create([
+        //     'user_id' => $user->id,
+        //     'edition_id' => 101, // 存在するIDを適当に
+        //     'is_purchased' => true,
+        //     'is_wishlist' => false,
+        // ]);
     }
 }

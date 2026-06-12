@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TrackerController;
@@ -64,3 +65,16 @@ Route::get('/contact/send', [ContactController::class, 'thanks'])
 //退会処理後リダイレクト
 Route::get('/thanks', [ProfileController::class, 'thanks'])
     ->name('thanks');
+
+//管理者画面用
+Route::middleware('auth', 'admin')->group(function () {
+    // 閲覧表示用
+    Route::get('/admin', [AdminController::class, 'index'])
+        ->name('admin');
+    //　新規登録画面用
+    Route::get('/admin/create', [AdminController::class, 'create'])
+        ->name('admin.create');
+    // 保存処理用
+    Route::post('/admin', [AdminController::class, 'store'])
+        ->name('admin.store');
+});
