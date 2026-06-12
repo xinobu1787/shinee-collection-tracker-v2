@@ -28,5 +28,9 @@ class AppServiceProvider extends ServiceProvider
 
         UserRandom::observe(UserRandomObserver::class);
         User::observe(UserObserver::class);
+
+        if (config('app.env') === 'production') {
+        \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
     }
 }
