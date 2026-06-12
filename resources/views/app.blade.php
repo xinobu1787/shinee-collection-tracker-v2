@@ -17,7 +17,7 @@
         <!-- Scripts -->
         @routes
         @viteReactRefresh
-        @vite(['resources/js/app.jsx', "resources/js/Pages/Tracker/Index.jsx"])
+        @vite(['resources/js/app.jsx'])
         @inertiaHead
 
         <link rel="manifest" href="/manifest.json">
