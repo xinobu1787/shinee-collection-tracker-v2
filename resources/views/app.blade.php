@@ -19,6 +19,8 @@
         @viteReactRefresh
         @vite(['resources/js/app.jsx', "resources/js/Pages/{$page['component']}.jsx"])
         @inertiaHead
+
+        <link rel="manifest" href="/manifest.json">
     </head>
     <body class="font-sans antialiased">
         @inertia
