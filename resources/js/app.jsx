@@ -15,8 +15,8 @@ createInertiaApp({
         const path = name.startsWith('Pages/') ? `./${name}.jsx` : `./Pages/${name}.jsx`;
         
         return resolvePageComponent(
-            path,
-            import.meta.glob('./Pages/**/*.jsx'),
+        `./Pages/${name}.jsx`, 
+        import.meta.glob('./Pages/**/*.jsx')
         );
     },
     setup({ el, App, props }) {
